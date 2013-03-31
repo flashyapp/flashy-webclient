@@ -1,4 +1,4 @@
 flashy-webclient
 ================
 
-Flashy android application
+Flashy web client code - HTML + JavaScript
