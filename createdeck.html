@@ -4,7 +4,7 @@
 
 <head>
 <title>
-Flashy: Create Deck from Image
+Flashy: Create New Deck
 </title>
 </head>
 
@@ -12,13 +12,21 @@ Flashy: Create Deck from Image
 
 <p> <a href="index.html">Return to Index</a> </p>
 
-Please select an image:
-<form name="upload" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/from_image" >
-<input type="file" name="file" />
-<input type="text" name="username" />
-
+Create a new deck from a picture of a list of terms:
+<form id="from_image" name="data" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/from_image" >
+<input type="file" name="file" /> <br>
 <input type="submit" />
 </form>
 
+<br>
+
+Create a new, empty deck:
+<form id="from_list" name="data" method="post" action="http://www.flashyapp.com/api/deck/new/from_lists"> 
+Optional - create cards from a typed list of terms: <br> <input type="textarea" />
+<input type="submit" />
+</form>
+
+<script src="jquery.js"></script>
+<script src="createdeck.js"></script>
 </body>
 </html> 
