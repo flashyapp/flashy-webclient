@@ -11,7 +11,7 @@ Flashy: User Login
 <body>
 <p> <a href="index.html">Return to Index</a> </p>
 
-To login to your user account, please enter the following information: <br>
+<p id="logged_out" >To login to your user account, please enter the following information: </p>
 <form id="form" name="data" method="post" action="http://www.flashyapp.com/api/user/create_user" >
 
 Username: <input type="text" name="username" /> <br>
@@ -19,7 +19,11 @@ Password: <input type="password" name="password" /> <br>
 <input type="submit" id="button" />
 </form>
 
+<p id="logged_in"></p>
+<a href="#" id="logout"></a>
+
 <script src="jquery.js"></script>
+<script src="jquery.cookie.js"></script>
 <script src="login.js"></script>
 </body>
 </html> 

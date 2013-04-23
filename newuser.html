@@ -15,12 +15,15 @@ To create a new user, please enter the following information: <br>
 <form id="form" name="data" method="post" action="http://www.flashyapp.com/api/user/create_user" >
 
 Username: <input type="text" name="username" /> <br>
-Password: <input type="password" name="password" /> <br>
-Email Address: <input type="text" name="email" /> <br>
+Password: <input type="password" name="password" /> 
+Confirm Password: <input type="password" name="cf_password" /> <br>
+Email Address: <input type="text" name="email" /> 
+Confirm Email Address: <input type="text" name="cf_email" /> <br>
 <input type="submit" id="button" />
 </form>
 
 <script src="jquery.js"></script>
+<script src="jquery.cookie.js"></script>
 <script src="newuser.js"></script>
 </body>
 </html> 

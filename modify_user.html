@@ -11,16 +11,24 @@ Flashy: User Modification
 <body>
 <p> <a href="index.html">Return to Index</a> </p>
 
-To change your password, please enter the following information: <br>
-<form id="form" name="data" method="post" action="http://www.flashyapp.com/api/user/create_user" >
+<p id="logged_in">To change your password, please enter the following information: </p>
+<form id="form" name="data" method="post" action="http://www.flashyapp.com/api/user/modify" >
 
-Username: <input type="text" name="username" /> <br>
 Old Password: <input type="password" name="old_password" /> <br>
 New Password: <input type="password" name="new_password" /> <br>
-<input type="submit" id="button" />
+Confirm New Password: <input type="password" name="cf_new_password" /> <br>
+<input type="submit" id="button" /></form>
+
+<p>Forgot password? Enter your username and email here and we'll send you a new one.</p>
+<form id="reset_password" name="data" method="post" action="http://www.flashyapp.com/api/user/reset_password" >
+
+Username: <input type="text" name="username" /> <br>
+Email Address: <input type="text" name="email" /> <br>
+<input type="submit" />
 </form>
 
 <script src="jquery.js"></script>
+<script src="jquery.cookie.js"></script>
 <script src="modify_user.js"></script>
 </body>
 </html> 
