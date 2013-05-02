@@ -17,7 +17,7 @@ Flashy: Create New Deck
 <p id="logged_out" >Please log in first to access deck features. </p>
 
 Create a new deck from a picture of a list of terms:
-<form id="from_image" name="data" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/from_image" >
+<form id="from_image" name="data" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/upload_image" >
 <input type="file" name="file" /> <br>
 <input type="submit" />
 </form>
@@ -35,6 +35,8 @@ Optionally, create your cards automatically from a typed list of terms: <br>
 
 <script src="jquery.js"></script>
 <script src="jquery.cookie.js"></script>
+<script src="jquery.form.js"></script>
+<script src="jquery-ui.js"></script>
 <script src="createdeck.js"></script>
 </body>
 </html> 

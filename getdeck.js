@@ -49,11 +49,11 @@ $( document ).ready(function() {
 			var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 			var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/delete";
 			
-			var deletethis = true;
+			var deletethis = false;
 			
 			$("#delete_dialog").dialog({
-				buttons: [ { text: "Delete", click: function() { $(this).dialog("close"); } },
-						   { text: "Cancel", click: function() { deletethis = false; $(this).dialog("close"); } } ],
+				buttons: [ { text: "Delete", click: function() { deletethis = true; $(this).dialog("close"); } },
+						   { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
 				modal: true,
 				title: "Delete Deck",
 				close: function() {
@@ -97,11 +97,11 @@ $( document ).ready(function() {
 			var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 			var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/modify";
 			
-			var modifythis = true;
+			var modifythis = false;
 			
 			$("#modify_dialog").dialog({
-				buttons: [ { text: "Modify", click: function() { $(this).dialog("close"); } },
-						   { text: "Cancel", click: function() { modifythis = false; $(this).dialog("close"); } } ],
+				buttons: [ { text: "Modify", click: function() { modifythis = true; $(this).dialog("close"); } },
+						   { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
 				modal: true,
 				title: "Modify Deck",
 				close: function() {
@@ -159,7 +159,8 @@ $( document ).ready(function() {
 								side = "A";
 								if (index == -1) index = current_deck.cards.length - 1;
 								$("#card_viewer").text("");
-								$("#card_viewer").append(current_deck.cards[index].sideA) } },
+								$("#card_viewer").append(current_deck.cards[index].sideA);
+								getCardResource(current_deck.cards[index].index); } },
 								
 						    { text: "Back", click: function() {
 								$("#card_viewer").text("");
@@ -170,13 +171,14 @@ $( document ).ready(function() {
 								side = "A";
 								if (index == current_deck.cards.length) index = 0;
 								$("#card_viewer").text("");
-								$("#card_viewer").append(current_deck.cards[index].sideA); } },
+								$("#card_viewer").append(current_deck.cards[index].sideA);
+								getCardResource(current_deck.cards[index].index); } },
 
 							{ text: "Delete this Card", click: function() { 
-								deleteCard(current_deck.cards[index]); } },
+								deleteCard(current_deck.cards[index].index); } },
 							
 							{ text: "Modify this Card", click: function() { 
-								modifyCard(current_deck.cards[index]); } } ],
+								modifyCard(current_deck.cards[index].index); } } ],
 				modal: true,
 				title: "Card Viewer",
 				close: function() { ; }
@@ -215,11 +217,11 @@ $( document ).ready(function() {
 			var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 			var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/create";
 			
-			var createthis = true;
+			var createthis = false;
 			
 			$("#create_dialog").dialog({
-				buttons: [ { text: "Create", click: function() { $(this).dialog("close"); } },
-						   { text: "Cancel", click: function() { createthis = false; $(this).dialog("close"); } } ],
+				buttons: [ { text: "Create", click: function() { createthis = true; $(this).dialog("close"); } },
+						   { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
 				modal: true,
 				title: "Create New Card",
 				close: function() {
@@ -310,10 +312,14 @@ function deleteCard(index) {
 
 function modifyCard(index) {
 	$("#card_options").text("");
-	$("#card_options").append("Please enter the new text for side A and side B: <br> Side A : " 
-							+ "<input type='text' id='side_a' /> <br> Side B: <input type='text' id='side_b' />"
+	$("#card_options").append("Please enter the new text for side A and side B: <br> Side A : "
+							+ "<input type='text' id='side_a' /> <br> Side B: <input type='text' id='side_b' /> <br>"
+							+ "To add an image or other resource, please use the button below: <br>"
+							+ "<form id='resource' action='#' method='post'> <input type='hidden' id='session_id' name='session_id' />"
+							+ "<input type='hidden' id='username' name='username' /> <input type='hidden' id='index' name='index' />"
+							+ "<input type='file' id='file' name='file' /> </form> <br>"
 							+ "<button id='modify_card'>Modify</button><button id='modify_cancel'>Cancel</button>");
-							
+				
 	$("#modify_cancel").click( function(event) {
 		event.preventDefault();
 		
@@ -324,15 +330,22 @@ function modifyCard(index) {
 	$("#modify_card").click( function(event) {
 		event.preventDefault();
 		
+		//Card HTML data
 		var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 		request.sideA = $("#side_a").val();
 		request.sideB = $("#side_b").val();
 		request.index = index;
 		
-		var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify"; 
+		//Form data for resources
+		$("#username").val($.cookie("username"));
+		$("#session_id").val($.cookie("session_id"));
+		$("#index").val(index);
+		
+		var htmlurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify"; 
+		var resourceurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/add_resource";
 		
 		$.ajax({
-			url: urltext,
+			url: htmlurl,
 			data: JSON.stringify(request),
 			contentType: "application/json",
 			type: "POST",
@@ -343,7 +356,6 @@ function modifyCard(index) {
 					else if (json.error == 300) alert("Error: This deck no longer exists.");
 					if (json.error == 0){
 						alert("Card successfully modified.");
-						location.reload();
 					}
 				},
 				error: function(xhr, status) { 
@@ -352,6 +364,59 @@ function modifyCard(index) {
 				},
 				complete: function(xhr, status) { ; }
 		});
+		
+		console.log("Tell me you reached this point.");
+		
+		$("#resource").ajaxSubmit({
+			url: resourceurl,
+			contentType: "multipart/form-data",
+			type: "POST",
+			dataType: "json",
+			success: function(json) { 
+				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+				else if (json.error == 300) alert("Error: This deck no longer exists.");
+				
+				console.log(json);
+				location.reload();
+			},
+			error: function(xhr, status) { 
+				console.log(xhr);
+				alert( "Error handling request.");
+			},
+			complete: function(xhr, status) { ; }
+		});
+		
+		
+	});
+}
+
+function getCardResource(index) {
+	
+	console.log(index);
+	
+	var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
+	request.index = index;
+		
+	var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/get_resources"; 
+		
+	$.ajax({
+		url: urltext,
+		data: JSON.stringify(request),
+		contentType: "application/json",
+		type: "POST",
+		dataType: "json",
+		success: function(json) { 
+			if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+			else if (json.error == 300) alert("Error: This deck no longer exists.");
+			if (json.error == 0){
+				console.log(json);				
+			}
+		},
+		error: function(xhr, status) { 
+			console.log(xhr);
+			alert( "Error handling request.");
+		},
+		complete: function(xhr, status) { ; }
 	});
 }
 
