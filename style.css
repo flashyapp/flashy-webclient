@@ -1,0 +1,32 @@
+body {
+	background-image: url("background.jpg");
+	background-repeat: repeat-x;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 100%;
+	color: #002147;
+}
+
+h1 {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 2em;
+}
+
+p {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	
+}
+
+.line{
+	padding: 1px;
+}
+
+.box{
+	border-style: solid;
+	border-color: #000;
+}
+
+.image{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
