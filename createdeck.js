@@ -107,8 +107,8 @@ function displayImage(divs, name)
 		h = this.height;
 		$("#image").attr("width", w);
 		$("#image").attr("height", h);
-		console.log(this.width + "x" + this.height);
-		drawImageLines();
+		//console.log(this.width + "x" + this.height);
+		drawImageLines(divs);
 		$("#divlines").dialog("option", "minHeight", h + 150);
 		$("#divlines").dialog("option", "minWidth", w + 150);
 	}	
@@ -119,27 +119,29 @@ function displayImage(divs, name)
 		buttons: [ { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
 		modal: true,
 		title: "Adjust line splitting",
-		close: function() { ; }
+		close: function() { 
+			$("#divlines").text(""); 
+		}
 	});
 	
 }
 
 
 
-function drawImageLines() {
+function drawImageLines(divs) {
 
 	var rowIndex = 0;
 	var colIndex = 0;
 	
-	window.numRows = 5;
-	window.numCols = 5;
+	window.numRows = divs.length;
+	//window.numCols = 5;
 	
 	var x1 = parseInt($(".image").css("left"));
 	var y1 = parseInt($(".image").css("top"));
 	var x2 = parseInt($("#image").attr("width")) + parseInt($(".image").css("left"));
 	var y2 = parseInt($("#image").attr("height")) + parseInt($(".image").css("top"));
 
-	console.log(x1 + " " + y1 + " " + x2 + " " + y2); 
+	//console.log(x1 + " " + y1 + " " + x2 + " " + y2); 
 		
 	drawImageBox(x1, y1, x2, y2);
 	var boxHeight = Math.abs(y1 - y2);
@@ -148,14 +150,14 @@ function drawImageLines() {
 	var prevY = y1;
 	for (i = 0.0; i < numRows - 1; i++)
 	{
-		var y = (i+1) * y2 / numRows;	
+		var y = divs[i][0];	
 		var yid = "row" + rowIndex;
 		drawHorizontalLine(x1, y, x2, y, rowIndex);
 		
 		colIndex = 0;
-		for (j = 0.0; j < numCols - 1; j++)
+		for (j = 1.0; j < divs[i][1].length - 1; j++)
 		{
-			var x = (j+1) * x2 / numCols;
+			var x = divs[i][1][j];
 			var xid = yid + "col" + colIndex;
 			drawVerticalLine(x, prevY, x, y, xid);
 			colIndex++;
@@ -167,9 +169,9 @@ function drawImageLines() {
 	
 	//bottom row
 	colIndex = 0;
-	for (j = 0.0; j < numCols - 1; j++)
+	for (j = 1.0; j < divs[i][1].length - 1; j++)
 	{
-		var x = (j+1) * x2 / numCols;
+		var x = divs[i][1][j];
 		var xid = "row" + rowIndex + "col" + colIndex;
 		drawVerticalLine(x, prevY, x, y2, xid);
 		colIndex++;
