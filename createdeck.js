@@ -33,7 +33,9 @@ $( document ).ready(function() {
 				if (json.error == 500) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
 				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
 				if (json.error == 200) alert("Error: Please upload a valid image");
-				if (json.error == 0) displayImage(json.divs, json.name);
+				if (json.error == 0) {
+					displayImage(json.divs, json.name);
+				}
 				console.log(json);
 			},
 			error: function(xhr, status) { 
@@ -95,7 +97,7 @@ $( document ).ready(function() {
 function displayImage(divs, name)
 {
 	$("#divlines").append("<img src='http://www.flashyapp.com/resources/tmp/" + name 
-		+ "' alt='preview' class='image' id='image'></img>");
+		+ "' alt='preview' class='image' id='image'></img> <br>");
 	
 	var w;
 	var h;
@@ -115,13 +117,74 @@ function displayImage(divs, name)
 	
 	img.src = "http://www.flashyapp.com/resources/tmp/" + name;
 	
+	var submitthis = 0;
+	
 	$("#divlines").dialog({
-		buttons: [ { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
+		buttons: [ { text: "Submit", click: function() { submitthis = 1; $(this).dialog("close"); } },
+				   { text: "Cancel", click: function() { $(this).dialog("close"); } } ],
 		modal: true,
 		title: "Adjust line splitting",
 		close: function() { 
-			$("#divlines").text(""); 
-		}
+			if (submitthis) {
+				
+				var request = $("#from_image").serializeObject();
+				request.username = $.cookie("username");
+				request.session_id = $.cookie("session_id");
+				request.name = name;
+				
+				var newdivs = new Array(divs.length);
+								
+				for (i = 0; i < divs.length - 1; i++)
+				{
+					newdivs[i] = new Array(2);
+					newdivs[i][0] = getHorizontal(i);
+					newdivs[i][1] = new Array(divs[i][1].length);
+					newdivs[i][1][0] = 0;
+					for (j = 1; j < divs[i][1].length - 1; j++)
+					{
+						newdivs[i][1][j] = getVertical(i, j-1);
+					}
+					newdivs[i][1][j] = parseInt($("#box").css("width"));
+				}
+				
+				//console.log(newdivs);
+				
+				request.divs = newdivs;
+				
+				var urltext = "http://www.flashyapp.com/api/deck/new/from_image";
+				
+				if ((request.username == null) || (request.session_id == null))
+					alert("Please log in first to access deck creation features");
+				else if (request.deck_name == "")
+					alert("Please enter a name for your deck.");
+				else {
+					$.ajax({
+						url: urltext,
+						data: JSON.stringify(request),
+						contentType: "application/json",
+						type: "POST",
+						dataType: "json",
+						success: function(json) { 
+							if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+							else if (json.error == 500) alert("Error handling request.");
+							else if (json.error == 201) alert("Error: Please upload the image to our servers first.");
+							if (json.error == 0){
+								alert("Deck successfully created.");
+								location.href = "decklist.html";
+							}
+							console.log(json);
+						},
+						error: function(xhr, status) { 
+							console.log(xhr);
+							alert( "Error handling request.");
+						},
+						complete: function(xhr, status) { ; }
+					});
+				}
+			}
+			
+			$("#divlines").text("");
+		}			
 	});
 	
 }
@@ -134,7 +197,7 @@ function drawImageLines(divs) {
 	var colIndex = 0;
 	
 	window.numRows = divs.length;
-	//window.numCols = 5;
+	window.divs = divs;
 	
 	var x1 = parseInt($(".image").css("left"));
 	var y1 = parseInt($(".image").css("top"));
@@ -219,7 +282,7 @@ function drawHorizontalLine(x1, y1, x2, y2, index) {
 		containment: '#box',
 		drag: function() {
 			//change length of vertical lines
-			for (i = 0; i < window.numCols - 1; i++)
+			for (i = 0; i < window.divs[index][1].length - 1; i++)
 			{
 				//top row
 				if (index == 0) {
@@ -286,6 +349,18 @@ function createCards(string)
 	}
 	
 	return cards;
+}
+
+//return the y-position of a horizontal line
+function getHorizontal(index)
+{
+	return parseInt($("#row" + index).css("top")) - parseInt($("#box").css("top"));
+}
+
+//return the x-position of a vertical line
+function getVertical(index, jindex)
+{
+	return parseInt($("#row" + index + "col" + jindex).css("left")) - parseInt($("#box").css("left"));
 }
 
 //serializes form data into JSON object.
