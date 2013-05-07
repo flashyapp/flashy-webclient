@@ -20,11 +20,13 @@ Flashy: Create New Deck
 
 Create a new deck from a picture of a list of terms:
 <form id="from_image" name="data" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/upload_image" >
-<input type="file" name="file" /> <br>
+<input type="file" id="file" name="file" /> <br>
 <input type="submit" />
 </form>
 
 <br>
+
+<div id="divlines"></div>
 
 Create a new, empty deck of flash cards:
 <form id="from_list" name="data" method="post" action="http://www.flashyapp.com/api/deck/new/from_lists">
