@@ -6,37 +6,40 @@
 <link rel="stylesheet" type="text/css" href="jquery-ui-custom.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 <title>
-Flashy: Index
+Flashy: The Smart Flash Card App
 </title>
 </head>
 
 <body>
 
-<p> <img src="flashy_logo.png" alt="Flashy Logo" width=250 height=165></img> </p>
+<div id="top">
+<div id="logo" > <img src="flashy_logo.png" alt="Flashy Logo" width=125 height=90></img> </div>
 
-<p id="logged_in" ></p>
+<div id="login" >
 
-<p>This page, as it is, is only present in the prototype website as a directory to all other pages. </p>
+<div id="logged_in" >
+</div>
 
-<p>All pages currently WIP. </p>
+<div id="logged_out" >
+<form id="login_data" name="data" method="post" action="http://www.flashyapp.com/api/user/login" >
+Username: <input type="text" name="username" />
+Password: <input type="password" name="password" />
+<input type="submit" id="button" value="Login" /> </form>
+</div>
 
-<a href="imageupload.html">Image Uploader</a> - Functional, minimal interface <br>
-<a href="getcard.html">Card Viewer</a> - Hard-coded sample cards, minimal interface <br>
+</div>
+</div>
 
-<h2>User Interactions</h2>
-<a href="newuser.html">Create New User</a> - Fully functional (design is WIP) <br>
-<a href="modify_user.html">Change/Reset Password</a> - Change password - Fully functional / Reset password - WIP <br>
-<a href="login.html">Login/Logout</a> - Fully functional <br>
-
-<h2>Deck Interactions</h2>
-
-<a href="decklist.html">View Deck List</a> - Functional <br>
-<a href="createdeck.html">Create Deck</a> - From list - fully functional / From image - WIP <br>
-<a href="getdeck.html">View Deck</a> - Should not access from this page. Go to View Deck List and select a deck. <br>
-<a href="movinglines.html">Moving Lines Demo</a> - Demo of Line Division Code 
+<div id="middle">
+<div id="decklist">This is where the deck list will be.</div>
+<div id="getdeck">This is where the deck info will be.</div>
+</div>
 
 <script src="jquery.js"></script>
 <script src="jquery.cookie.js"></script>
+<script src="jquery.form.js"></script>
+<script src="jquery-ui.js"></script>
 <script src="index.js"></script>
+<script src="ndecklist.js"></script>
 </body>
 </html> 

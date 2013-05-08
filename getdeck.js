@@ -177,7 +177,7 @@ $( document ).ready(function() {
 								deleteCard(current_deck.cards[index].index); } },
 							
 							{ text: "Modify this Card", click: function() { 
-								modifyCard(current_deck.cards[index].index); } } ],
+								modifyCard(current_deck.cards[index]); } } ],
 				modal: true,
 				title: "Card Viewer",
 				close: function() { ; }
@@ -309,12 +309,14 @@ function deleteCard(index) {
 	});
 }
 
-function modifyCard(index) {
+function modifyCard(card) {
 	$("#card_options").text("");
 	$("#card_options").append("Please enter the new text for side A and side B: <br>" 
-							+ "Side A: <textarea id='new_sidea'></textarea> <br>"
-							+ "Side B: <textarea id='new_sideb'></textarea> <br>"
-							+ "To add an image or other resource, please use the button below: <br>"
+							+ "Side A: <textarea id='new_sidea'>" + card.sideA + "</textarea> <br>"
+							+ "Side B: <textarea id='new_sideb'>" + card.sideB + "</textarea> <br>"
+							+ "To add an image, set the side to add it to and use the button: <br>"
+							+ "<input id='side_choice' type='radio' name='side' value='Side A'>"
+							+ "<input id='side_choice' type='radio' name='side' value='Side B'>"
 							+ "<form id='resource' action='#' method='post'> <input type='hidden' id='session_id' name='session_id' />"
 							+ "<input type='hidden' id='username' name='username' /> <input type='hidden' id='index' name='index' />"
 							+ "<input type='file' id='file' name='file' /> </form> <br>"
@@ -332,61 +334,98 @@ function modifyCard(index) {
 		
 		//Card HTML data
 		var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
-		request.sideA = $("#side_a").val();
-		request.sideB = $("#side_b").val();
-		request.index = index;
+		request.sideA = $("#new_sidea").val();
+		request.sideB = $("#new_sideb").val();
+		request.index = card.index;
 		
 		//Form data for resources
 		$("#username").val($.cookie("username"));
 		$("#session_id").val($.cookie("session_id"));
-		$("#index").val(index);
+		$("#index").val(card.index);
 		
+		var sidechoice = $("#side_choice").val();
+				
 		var htmlurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify"; 
 		var resourceurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/add_resource";
 		
-		$.ajax({
-			url: htmlurl,
-			data: JSON.stringify(request),
-			contentType: "application/json",
-			type: "POST",
-			dataType: "json",
+		//console.log(request);
+		
+		if ($("#file").val() != "") {
+			$("#resource").ajaxSubmit({
+				url: resourceurl,
+				contentType: "multipart/form-data",
+				type: "POST",
+				dataType: "json",
 				success: function(json) { 
 					if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
-					else if (json.error == 400) alert("Error handling request.");
 					else if (json.error == 300) alert("Error: This deck no longer exists.");
-					if (json.error == 0){
-						alert("Card successfully modified.");
+					else {
+						console.log(json);
+					
+						//Add resource formatting to correct side, default to side A
+						if (sidechoice == "Side B") $("#new_sideb").append("<br> <img src='[FLASHYRESOURCE:" + json.resource_id + "]' />"); 
+						else $("#new_sidea").append("<br> <img src='FLASHYRESOURCE:" + json.resource_id + "' />");
+					
+						request.sideA = $("#new_sidea").val();
+						request.sideB = $("#new_sideb").val();
+						
+						$.ajax({
+							url: htmlurl,
+							data: JSON.stringify(request),
+							contentType: "application/json",
+							type: "POST",
+							dataType: "json",
+							success: function(json) { 
+									if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+									else if (json.error == 400) alert("Error handling request.");
+									else if (json.error == 300) alert("Error: This deck no longer exists.");
+									if (json.error == 0){
+										alert("Card successfully modified.");
+									}
+									console.log(json);
+								},
+								error: function(xhr, status) { 
+									console.log(xhr);
+									alert( "Error handling request.");
+								},
+								complete: function(xhr, status) { ; }
+						});
 					}
+					location.reload();
 				},
 				error: function(xhr, status) { 
 					console.log(xhr);
 					alert( "Error handling request.");
 				},
 				complete: function(xhr, status) { ; }
-		});
+			});
+		}
 		
-		console.log("Tell me you reached this point.");
-		
-		$("#resource").ajaxSubmit({
-			url: resourceurl,
-			contentType: "multipart/form-data",
-			type: "POST",
-			dataType: "json",
-			success: function(json) { 
-				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
-				else if (json.error == 300) alert("Error: This deck no longer exists.");
-				
-				console.log(json);
-				location.reload();
-			},
-			error: function(xhr, status) { 
-				console.log(xhr);
-				alert( "Error handling request.");
-			},
-			complete: function(xhr, status) { ; }
-		});
-		
-		
+		else {
+			$.ajax({
+				url: htmlurl,
+				data: JSON.stringify(request),
+				contentType: "application/json",
+				type: "POST",
+				dataType: "json",
+				success: function(json) { 
+						if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+						else if (json.error == 400) alert("Error handling request.");
+						else if (json.error == 300) alert("Error: This deck no longer exists.");
+						if (json.error == 0){
+							alert("Card successfully modified.");
+						}
+						console.log(json);
+						location.reload();
+					},
+					error: function(xhr, status) { 
+						console.log(xhr);
+						alert( "Error handling request.");
+					},
+					complete: function(xhr, status) { ; }
+			});
+		}
+		//console.log("Tell me you reached this point.");
 	});
 }
 
@@ -415,7 +454,7 @@ function getCardResource(card, side) {
 				
 				$("#card_viewer").text("");
 				
-				//console.log(card.sideA, card.sideB);
+				console.log(card.sideA, card.sideB);
 				
 				var newtext;
 				if (side == "A") newtext = card.sideA;
