@@ -76,7 +76,7 @@ $( document ).ready(function() {
 							else if (json.error == 300) alert("Error: This deck no longer exists.");
 							if (json.error == 0){
 								alert("Deck successfully deleted.");
-								location.href = "decklist.html";
+								location.reload();
 							}
 						},
 						error: function(xhr, status) { 
@@ -156,8 +156,8 @@ $( document ).ready(function() {
 			
 			event.preventDefault();
 			
-			var index = 0;
-			var side = "A";
+			index = 0;
+			side = "A";
 			
 			$("#card_list").dialog({
 				buttons: [  { text: "Previous Card", click: function() { 
