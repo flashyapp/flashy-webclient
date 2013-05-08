@@ -7,6 +7,9 @@ $( document ).ready(function() {
 										domain: "www.flashyapp.com",
 										path: "/"
 										});
+		$("#createdeck").hide();
+		$("#deckplaceholder").hide();
+		$("#getdeck").show();
 		//location.href = "getdeck.html";
 	}));
 
@@ -35,7 +38,7 @@ $( document ).ready(function() {
 				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
 				else if (json.error == 500) alert("Error handling request.");
 				else {
-					console.log(json.decks);
+					//console.log(json.decks);
 					for (i in json.decks)
 					{
 						displayDeck(json.decks[i]);

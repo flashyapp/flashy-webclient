@@ -1,14 +1,14 @@
 $( document ).ready(function() {
 
-	$("#logged_in").hide();
+	/*$("#logged_in").hide();*/
 		
 	//if already logged in, hide login message
-	if (($.cookie("username") != null) && ($.cookie("session_id") != null) 
-		&& ($.cookie("deck_id") != null)) {
+	if (($.cookie("username") != null) && ($.cookie("session_id") != null) && ($.cookie("deck_id") != null)) {
+		/*&& ($.cookie("deck_id") != null)) {
 		
 		$("#logged_out").hide();
 		
-		$("#logged_in").show();
+		$("#logged_in").show();*/
 		
 		var delete_setup = false;
 		var modify_setup = false;
@@ -17,7 +17,9 @@ $( document ).ready(function() {
 		
 		//this will store the current deck info after the first AJAX call
 		var current_deck = null;
-			
+		
+		$("#decklist").on("click", "a.deck", (function(event) {
+		event.preventDefault();
 		//AJAX - get_deck - receive deck information
 		var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 		var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/get";
@@ -41,6 +43,7 @@ $( document ).ready(function() {
 			},
 			complete: function(xhr, status) { ; }
 		});
+		}));
 		
 		//AJAX - delete deck
 		$("#delete").click(function(event) {
@@ -180,7 +183,7 @@ $( document ).ready(function() {
 								modifyCard(current_deck.cards[index]); } } ],
 				modal: true,
 				title: "Card Viewer",
-				close: function() { $("#card_viewer").text(""); }
+				close: function() { ; }
 			});
 			
 			//Card viewer flip functionality
@@ -261,8 +264,7 @@ $( document ).ready(function() {
 			$("#create_dialog").dialog("open");
 			
 		});
-				
-	}		
+	}				
 });
 
 function deleteCard(index) {
@@ -484,12 +486,13 @@ function display(json) {
 	var desctext = "<p>" + json.description + "</p>";
 	var cardtext = "<p>Number of cards in deck: " + json.cards.length + "</p>";
 	
+	$("#deck_info").text("");
 	$("#deck_info").append(nametext, desctext, cardtext);
 }
 
 //serializes form data into JSON object
 //taken from http://stackoverflow.com/questions/1184624/convert-form-data-to-js-object-with-jquery
-$.fn.serializeObject = function()
+/*$.fn.serializeObject = function()
 {
     var o = {};
     var a = this.serializeArray();
@@ -504,4 +507,4 @@ $.fn.serializeObject = function()
         }
     });
     return o;
-};
+};*/

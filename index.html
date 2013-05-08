@@ -31,8 +31,54 @@ Password: <input type="password" name="password" />
 </div>
 
 <div id="middle">
-<div id="decklist">This is where the deck list will be.</div>
-<div id="getdeck">This is where the deck info will be.</div>
+<div id="decklist"><h2>List of Flashy Decks</h2>
+<a href="#" id="newdeck">Create New Deck</a>
+</div>
+<div id="deckinfo">
+
+<div id="deckplaceholder">This is where deck data will appear.</div>
+
+<div id="createdeck" >
+Create a new deck from a picture of a list of terms:
+<form id="from_image" name="data" method="post" enctype="multipart/form-data" action="http://www.flashyapp.com/api/deck/new/upload_image" >
+Enter the name of your deck: <input type="text" name="deck_name" /> <br>
+Enter a brief description of its intended contents: <input type="text" name="description" /> <br>
+<input type="file" id="file" name="file" /> <br>
+<input type="submit" />
+</form>
+
+<br>
+
+<div id="divlines"></div>
+
+Create a new, empty deck of flash cards:
+<form id="from_list" name="data" method="post" action="http://www.flashyapp.com/api/deck/new/from_lists">
+Enter the name of your deck: <input type="text" name="deck_name" /> <br>
+Enter a brief description of its intended contents: <input type="text" name="description" /> <br> 
+Optionally, create your cards automatically from a typed list of terms: <br> 
+<textarea form="from_list" name="list" rows=5></textarea>
+<input type="submit" />
+</form></div>
+
+<div id="getdeck" >
+<div id="deck_info"></div>
+
+<div id="logged_in">
+<button id="delete">Delete this Deck</button> <br>
+<button id="modify">Modify this Deck</button> <br>
+<button id="view_cards">View the Cards in this Deck</button> <br>
+<button id="new_card">Add a new Card to this Deck</button>
+
+</div>
+
+<div id="delete_dialog"></div>
+<div id="modify_dialog"></div>
+<div id="card_list"><p id="card_viewer"></p><p id="card_options"></p></div>
+<div id="create_dialog"></div>
+<div id="add_resource"></div>
+</div>
+
+</div>
 </div>
 
 <script src="jquery.js"></script>
@@ -41,5 +87,7 @@ Password: <input type="password" name="password" />
 <script src="jquery-ui.js"></script>
 <script src="index.js"></script>
 <script src="ndecklist.js"></script>
+<script src="ncreatedeck.js"></script>
+<script src="ngetdeck.js"></script>
 </body>
 </html> 

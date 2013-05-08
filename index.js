@@ -4,7 +4,9 @@ $( document ).ready(function() {
 	if (($.cookie("username") != null) && ($.cookie("session_id") != null)) {
 
 		//Show welcome text
-		var logged_in_text = "Welcome back, " + $.cookie("username") + ". <a href='#' id='logout'>Logout</a>";
+		var logged_in_text = "<p>Welcome back, " + $.cookie("username") 
+			+ ". <a href='#' id='logout'>Logout</a> </p>"
+			+ "<p> <a href='modify_user.html'>Change/Reset Password</a>";
 		$("#logged_in").append(logged_in_text);
 		$("#logged_in").show();					
 	
@@ -15,6 +17,10 @@ $( document ).ready(function() {
 	else { 
 		;
 	}
+	
+	//hide functionality until called
+	$("#createdeck").hide();
+	$("#getdeck").hide();
 	
 	//AJAX - LOGIN - send user data to server
 	$("#login_data").submit(function(event) {
