@@ -21,10 +21,12 @@ Flashy: The Smart Flash Card App
 </div>
 
 <div id="logged_out" >
-<form id="login_data" name="data" method="post" action="http://www.flashyapp.com/api/user/login" >
+<p><form id="login_data" name="data" method="post" action="http://www.flashyapp.com/api/user/login" >
 Username: <input type="text" name="username" />
 Password: <input type="password" name="password" />
-<input type="submit" id="button" value="Login" /> </form>
+<input type="submit" id="button" value="Login" /> </form></p>
+
+<p><a href="newuser">Create an Account</a></p>
 </div>
 
 </div>
@@ -32,11 +34,12 @@ Password: <input type="password" name="password" />
 
 <div id="middle">
 <div id="decklist"><h2>List of Flashy Decks</h2>
-<a href="#" id="newdeck">Create New Deck</a>
+<button id="newdeck" class="stylebutton" >Create New Deck</button>
+<div id="decks"></div>
 </div>
 <div id="deckinfo">
 
-<div id="deckplaceholder">This is where deck data will appear.</div>
+<div id="deckplaceholder">Please select a Deck.</div>
 
 <div id="createdeck" >
 Create a new deck from a picture of a list of terms:
@@ -44,7 +47,7 @@ Create a new deck from a picture of a list of terms:
 Enter the name of your deck: <input type="text" name="deck_name" /> <br>
 Enter a brief description of its intended contents: <input type="text" name="description" /> <br>
 <input type="file" id="file" name="file" /> <br>
-<input type="submit" />
+<input type="submit" class="smallbutton" />
 </form>
 
 <br>
@@ -57,17 +60,17 @@ Enter the name of your deck: <input type="text" name="deck_name" /> <br>
 Enter a brief description of its intended contents: <input type="text" name="description" /> <br> 
 Optionally, create your cards automatically from a typed list of terms: <br> 
 <textarea form="from_list" name="list" rows=5></textarea>
-<input type="submit" />
+<input type="submit" class="smallbutton" />
 </form></div>
 
 <div id="getdeck" >
 <div id="deck_info"></div>
 
 <div id="logged_in">
-<button id="delete">Delete this Deck</button> <br>
-<button id="modify">Modify this Deck</button> <br>
-<button id="view_cards">View the Cards in this Deck</button> <br>
-<button id="new_card">Add a new Card to this Deck</button>
+<button id="delete" class="smallbutton" >Delete this Deck</button> <br>
+<button id="modify" class="smallbutton">Modify this Deck</button> <br>
+<button id="view_cards" class="smallbutton">View the Cards in this Deck</button> <br>
+<button id="new_card" class="smallbutton">Add a new Card to this Deck</button>
 
 </div>
 

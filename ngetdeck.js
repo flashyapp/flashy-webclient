@@ -21,7 +21,7 @@ $( document ).ready(function() {
 		//this will store the current deck info after the first AJAX call
 		var current_deck = null;
 		
-		$("#decklist").on("click", "a.deck", (function(event) {
+		$("#decks").on("click", "button", (function(event) {
 		event.preventDefault();
 		//AJAX - get_deck - receive deck information
 		var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
@@ -485,9 +485,9 @@ function getCardResource(card, side) {
 }
 
 function display(json) {
-	var nametext = "<p>" + json.name + "</p>";
-	var desctext = "<p>" + json.description + "</p>";
-	var cardtext = "<p>Number of cards in deck: " + json.cards.length + "</p>";
+	var nametext = "<h2>" + json.name + "</h2>";
+	var desctext = "<p class='center'>" + json.description + "</p>";
+	var cardtext = "<p class='center'>Number of cards in deck: " + json.cards.length + "</p>";
 	
 	$("#deck_info").text("");
 	$("#deck_info").append(nametext, desctext, cardtext);

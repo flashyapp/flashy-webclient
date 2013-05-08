@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 
-	$("#decklist").on("click", "a.deck", (function(event) {
+	$("#decks").on("click", "button", (function(event) {
 		event.preventDefault();
 		$.cookie("deck_id", this.id, {	
 										expires: 30,
@@ -57,9 +57,9 @@ $( document ).ready(function() {
 //dynamically displays a deck in html format
 function displayDeck(deck)
 {
-	var dtext = "<p><a id='" + deck.deck_id + "' href='#' class='deck'>" 
-				+ deck.name + "</a>: " + deck.description + "</p>";
-	$("#decklist").append(dtext);
+	var dtext = "<button id='" + deck.deck_id + "' class='stylebutton'><h3>" 
+				+ deck.name + "</h3><p>" + deck.description + "</p></button>";
+	$("#decks").append(dtext);
 }
 
 //serializes form data into JSON object
