@@ -15,6 +15,9 @@ $( document ).ready(function() {
 		var card_setup = false;
 		var create_setup = false;
 		
+		var index = 0;
+		var side = "A";
+		
 		//this will store the current deck info after the first AJAX call
 		var current_deck = null;
 			
@@ -150,8 +153,8 @@ $( document ).ready(function() {
 			
 			event.preventDefault();
 			
-			var index = 0;
-			var side = "A";
+			index = 0;
+			side = "A";
 			
 			$("#card_list").dialog({
 				buttons: [  { text: "Previous Card", click: function() { 
@@ -183,7 +186,15 @@ $( document ).ready(function() {
 				close: function() { $("#card_viewer").text(""); }
 			});
 			
-			//Card viewer flip functionality
+			if (!card_setup) {
+				card_setup = true;
+			}
+			$("#card_viewer").text("");
+			getCardResource(current_deck.cards[index], side);
+			$("#card_list").dialog("open");
+		});
+		
+		//Card viewer flip functionality
 			$("#card_viewer").click(function(event) {
 				event.preventDefault();
 			
@@ -200,14 +211,6 @@ $( document ).ready(function() {
 					getCardResource(current_deck.cards[index], side);
 				}				
 			});
-			
-			if (!card_setup) {
-				card_setup = true;
-			}
-			$("#card_viewer").text("");
-			getCardResource(current_deck.cards[index], side);
-			$("#card_list").dialog("open");
-		});
 		
 		//AJAX - Create a new card
 		$("#new_card").click(function(event) {
