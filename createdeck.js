@@ -134,20 +134,25 @@ function displayImage(divs, name)
 				
 				var newdivs = new Array(divs.length);
 								
-				for (i = 0; i < divs.length - 1; i++)
+				for (i = 0; i < divs.length; i++)
 				{
 					newdivs[i] = new Array(2);
-					newdivs[i][0] = getHorizontal(i);
+					
+					if (i != divs.length - 1) newdivs[i][0] = getHorizontal(i);
+					else newdivs[i][0] = parseInt($("#box").css("height")) - parseInt($("#box").css("top"));
+					
 					newdivs[i][1] = new Array(divs[i][1].length);
 					newdivs[i][1][0] = 0;
+					
 					for (j = 1; j < divs[i][1].length - 1; j++)
 					{
 						newdivs[i][1][j] = getVertical(i, j-1);
 					}
-					newdivs[i][1][j] = parseInt($("#box").css("width"));
+					
+					newdivs[i][1][j] = parseInt($("#box").css("width")) - parseInt($("#box").css("left"));
 				}
 				
-				//console.log(newdivs);
+				console.log(newdivs);
 				
 				request.divs = newdivs;
 				

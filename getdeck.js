@@ -158,9 +158,8 @@ $( document ).ready(function() {
 								index = index - 1;
 								side = "A";
 								if (index == -1) index = current_deck.cards.length - 1;
-								$("#card_viewer").text("");
-								$("#card_viewer").append(current_deck.cards[index].sideA);
-								getCardResource(current_deck.cards[index].index); } },
+								getCardResource(current_deck.cards[index], side);
+								} },
 								
 						    { text: "Back", click: function() {
 								$("#card_viewer").text("");
@@ -171,8 +170,8 @@ $( document ).ready(function() {
 								side = "A";
 								if (index == current_deck.cards.length) index = 0;
 								$("#card_viewer").text("");
-								$("#card_viewer").append(current_deck.cards[index].sideA);
-								getCardResource(current_deck.cards[index].index); } },
+								getCardResource(current_deck.cards[index], side); 
+								} },
 
 							{ text: "Delete this Card", click: function() { 
 								deleteCard(current_deck.cards[index].index); } },
@@ -192,13 +191,13 @@ $( document ).ready(function() {
 				if (side == "A") {
 					side = "B";
 					$("#card_viewer").text("");
-					$("#card_viewer").append(current_deck.cards[index].sideB);
+					getCardResource(current_deck.cards[index], side);
 				}
 				
 				else if (side == "B") {
 					side = "A";
 					$("#card_viewer").text("");
-					$("#card_viewer").append(current_deck.cards[index].sideA);
+					getCardResource(current_deck.cards[index], side);
 				}				
 			});
 			
@@ -206,7 +205,7 @@ $( document ).ready(function() {
 				card_setup = true;
 			}
 			$("#card_viewer").text("");
-			$("#card_viewer").append(current_deck.cards[0].sideA);
+			getCardResource(current_deck.cards[index], side);
 			$("#card_list").dialog("open");
 		});
 		
@@ -255,8 +254,8 @@ $( document ).ready(function() {
 						
 			if (!create_setup) {
 				$("#create_dialog").append("<p>Please enter the text for each side of the new card:</p>"
-					+ "Side A: <input type='text' id='new_sidea' /> <br>"
-					+ "Side B: <input type='text' id='new_sideb' /> <br>");
+					+ "Side A: <textarea id='new_sidea'></textarea> <br>"
+					+ "Side B: <textarea id='new_sideb'></textarea> <br>");
 				create_setup = true;
 			}
 			$("#create_dialog").dialog("open");
@@ -312,8 +311,9 @@ function deleteCard(index) {
 
 function modifyCard(index) {
 	$("#card_options").text("");
-	$("#card_options").append("Please enter the new text for side A and side B: <br> Side A : "
-							+ "<input type='text' id='side_a' /> <br> Side B: <input type='text' id='side_b' /> <br>"
+	$("#card_options").append("Please enter the new text for side A and side B: <br>" 
+							+ "Side A: <textarea id='new_sidea'></textarea> <br>"
+							+ "Side B: <textarea id='new_sideb'></textarea> <br>"
 							+ "To add an image or other resource, please use the button below: <br>"
 							+ "<form id='resource' action='#' method='post'> <input type='hidden' id='session_id' name='session_id' />"
 							+ "<input type='hidden' id='username' name='username' /> <input type='hidden' id='index' name='index' />"
@@ -390,15 +390,17 @@ function modifyCard(index) {
 	});
 }
 
-function getCardResource(index) {
+function getCardResource(card, side) {
 	
-	console.log(index);
+	//console.log(index);
 	
 	var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
-	request.index = index;
+	request.index = card.index;
 		
 	var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/get_resources"; 
-		
+	
+	var resources;
+	
 	$.ajax({
 		url: urltext,
 		data: JSON.stringify(request),
@@ -409,7 +411,23 @@ function getCardResource(index) {
 			if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
 			else if (json.error == 300) alert("Error: This deck no longer exists.");
 			if (json.error == 0){
-				console.log(json);				
+				//console.log(json.resources);
+				
+				$("#card_viewer").text("");
+				
+				//console.log(card.sideA, card.sideB);
+				
+				var newtext;
+				if (side == "A") newtext = card.sideA;
+				else if (side == "B") newtext = card.sideB;
+				
+				for (i = 0; i < json.resources.length; i++)
+				{
+					newtext = newtext.replace("[FLASHYRESOURCE:" + json.resources[i].resource_id + "]", 
+												"http://www.flashyapp.com/resources/" + json.resources[i].resource_id);
+				}
+				
+				$("#card_viewer").append(newtext); 
 			}
 		},
 		error: function(xhr, status) { 
@@ -417,7 +435,9 @@ function getCardResource(index) {
 			alert( "Error handling request.");
 		},
 		complete: function(xhr, status) { ; }
-	});
+	});		
+	
+	return resources;
 }
 
 function display(json) {
