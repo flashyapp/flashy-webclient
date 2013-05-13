@@ -1,0 +1,111 @@
+var LOGIN_FORM = "#login-form";
+
+function show_login_dialog()
+{
+    $("#overlay").show();
+    $("#dialog-login").show();
+}
+
+function hide_login_dialog()
+{
+    $("#overlay").hide();
+    $("#dialog-login").hide();
+}
+
+function load_user_ui_elements()
+{
+    // set the username
+    $("#username-display").text($.cookie("username"))
+}
+
+function login_user(username, password) {
+    console.log("logging in user");
+    $.ajax({
+	url: "http://www.flashyapp.com/api/user/login",
+	data: JSON.stringify({username: username, password:password}),
+	contentType: "application/json",
+	type: "POST",
+	dataType: "json",
+	success: function(json) { 
+	    if (json.error == 0) {
+		$.cookie("username", username, {
+		    expires: 30,
+		    domain: "www.flashyapp.com",
+		    path: "/"
+		});
+		$.cookie("session_id", json.session_id, {
+		    expires: 30,
+		    domain: "www.flashyapp.com",
+		    path: "/"
+		});
+		//console.log(request.username);
+		//console.log($.cookie("username"));
+		location.reload();
+	    }
+	    else if (json.error == 103) alert("Too many sessions (This should never actually appear.");
+	    else if (json.error == 101) alert("Invalid username or password.");
+	},
+	error: function(xhr, status) { 
+	    console.log(xhr);
+	    alert( "Error handling request.");
+	},
+	complete: function(xhr, status) { ; }
+    });
+}
+
+function logout_user() {
+    console.log("logging out the user");
+    $.ajax({
+	url: "http://www.flashyapp.com/api/user/logout",
+	data: JSON.stringify({username: $.cookie("username"), session_id:$.cookie("session_id")}),
+	contentType: "application/json",
+	type: "POST",
+	dataType: "json",
+	success: function(json) {
+	    //console.log($.cookie("username"));
+	    $.cookie("username", null, {domain: "www.flashyapp.com", path: "/"});
+	    $.cookie("session_id", null, {domain: "www.flashyapp.com", path: "/"});
+	    //console.log($.cookie("username"));
+	    location.reload();
+	},
+	error: function(xhr, status) { console.log(xhr); },
+	complete: function(xhr, status) { ; }
+    });
+}
+
+function hook_login_form() {
+    console.log("hooking the login form")
+    $(LOGIN_FORM).submit(function(event) {
+	event.preventDefault();
+	var r = $(LOGIN_FORM).serializeArray();
+	// login the user
+	login_user(r[0].value, r[1].value);
+    });
+}
+
+$( document ).ready(
+    function() {
+	console.log("User function hooks loading...");
+
+	// wrap the login form
+	hook_login_form();
+	// wrap the logout button
+	$("#logout-button").click(logout_user);
+	// wrap the signup form
+	
+	// if the user isn't logged in
+	if (($.cookie("username") == null) || ($.cookie("session_id") == null)) {
+	    console.log("User not logged in, showing login dialog")
+	    // display the login panel
+	    show_login_dialog();
+	    return;
+	}
+	
+	hide_login_dialog();
+	load_user_ui_elements();
+    }
+    
+);
+
+
+

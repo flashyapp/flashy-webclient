@@ -1,0 +1,155 @@
+var g_current_deck;
+
+function getCardResource() {
+    //console.log(index);
+    
+    var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
+    request.index = g_current_deck['index'];
+    
+    var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/get_resources"; 
+    
+    var resources;
+    
+    $.ajax({
+	url: urltext,
+	data: JSON.stringify(request),
+	contentType: "application/json",
+	type: "POST",
+	dataType: "json",
+	success: function(json) { 
+	    if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+	    else if (json.error == 300) alert("Error: This deck no longer exists.");
+	    if (json.error == 0){
+		//console.log(json.resources);
+		
+		g_current_deck['cards']['index']['resources'] = json.resources;
+		var newtext;
+		index = g_current_deck['index']
+		for (i = 0; i < json.resources.length; i++)
+		{
+		    newtext = g_current_deck['cards'][index]['sideA']
+		    newtext = newtext.replace("[FLASHYRESOURCE:" + json.resources[i].resource_id + "]", 
+					      "http://www.flashyapp.com/resources/" + json.resources[i].resource_id);
+		}
+		
+	    }
+	},
+	error: function(xhr, status) { 
+	    console.log(xhr);
+	    alert( "Error handling request.");
+	},
+	complete: function(xhr, status) { ; }
+    });		
+    
+    return resources;
+}
+
+
+function load_deck(event) {
+    console.log("loading deck...");
+    console.log(event.data.deck_id);
+    $.cookie("deck_id", event.data.deck_id, {domain: "www.flashyapp.com", path: "/"});
+    // ajax request to do the work
+    //AJAX - get_deck - receive deck information
+    var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
+    var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/get";
+    $.ajax({
+	url: urltext,
+	data: JSON.stringify(request),
+	contentType: "application/json",
+	type: "POST",
+	dataType: "json",
+	success: function(json) { 
+	    if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+	    else if (json.error == 500) alert("Error handling request.");
+	    if (json.error == 0){
+		g_current_deck = json;
+		g_current_deck['current_index'] = 0;
+		g_current_deck['side'] = 'A';
+		display_current_deck();
+	    }
+	},
+	error: function(xhr, status) { 
+	    console.log(xhr);
+	    alert( "Error handling request.");
+	},
+	complete: function(xhr, status) { ; }
+    });
+}
+
+function load_card(card_index)
+
+
+function display_current_deck() {
+    if (g_current_deck == null) {
+	return;
+    }
+    // for all the cards in the deck replace the flashyapp resource string
+    var index = g_current_deck['current_index'];
+    var side = g_current_deck['side'];
+
+    
+    var resources = g_current_deck['cards'][index]['side' + side]
+    $("#card-content").html(g_current_deck['cards'][index]['side' + side])
+}
+
+function flip_card() {
+    if (g_current_deck == null) {
+	return;
+    }
+    if (g_current_deck['side'] == 'A') {
+	g_current_deck['side'] = 'B';
+    }
+    else {
+	g_current_deck['side'] = 'A';
+    }
+    display_current_deck()
+}
+
+function next_card() {
+    if (g_current_deck == null) {
+	return;
+    }
+    // get the max value of cards
+    var max = g_current_deck['cards'].length
+    var index = g_current_deck['current_index']
+    index = index + 1;
+    if (index >= max) {
+	index = 0;
+    }
+    g_current_deck['current_index'] = index;
+    display_current_deck();
+}
+
+function prev_card() {
+    if (g_current_deck == null) {
+	return;
+    }
+    // get the max value of cards
+    var max = g_current_deck['cards'].length
+    var index = g_current_deck['current_index']
+    index = index - 1;
+    if (index < 0) {
+	index = max - 1;
+    }
+    g_current_deck['current_index'] = index;
+    display_current_deck();
+}
+
+
+$( document ).ready(function() {
+    console.log("card-viewer hooks init...");
+    if (($.cookie("username") == null) || ($.cookie("session_id") == null)) {
+	console.log("user not logged in, doing nothing");
+	return;
+    }
+    $("#card-content").click(flip_card);
+    $("#next").click(next_card);
+    $("#prev").click(prev_card);
+    // if the user had a deck loaded before, load it again
+    if ($.cookie("deck_id") != null)
+    {
+	load_deck({data: { deck_id: $.cookie("deck_id")}});
+    }
+});
+
