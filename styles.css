@@ -103,11 +103,11 @@ div#user-info span#modify-user:hover {
 div#logo {
     position:absolute;
     top:0px;
-    z-index:1;
+    z-index: 1;
 }
 
 div#logo img {
-    height:200px;
+    height:160px;
 }
 
 
@@ -137,7 +137,7 @@ div.dialog
 {
 	z-index: 3;
     width:700px;
-    height:200px;
+    height:210px;
     position: fixed;
     left:50%;
     top:50%;
@@ -192,11 +192,15 @@ div#deck-list div.title {
     border-bottom: solid;
 }
 
+div#deck-list div.scroll-pane {
+	overflow: auto;
+	height: 310px;
+}
+
 div#deck-list ul {
     padding:0px;
     margin:0px;
-	height: 310px; /*310 for 10 items - each item 31px*/
-	overflow: auto;
+	/*height: 310px; /*310 for 10 items - each item 31px*/
 }
 
 div#deck-list ul li {
@@ -240,7 +244,7 @@ div#card-viewer {
     background-color: #222222;
     padding:0px;
     position:absolute;
-    top: 11%; /*65px / 768*/
+    top: 16%; /*65px / 768*/
     left: 8%;
     /*margin-left: -400px;*/
     border-radius:25px;
@@ -349,11 +353,32 @@ div#card-viewer div#image-division-options
 {
 	z-index: 0;
 	position: absolute;
-	width: 87%;
+	width: 88%;
 	height: 6%;
 	left: 6%;
 	top: 93%;
 	vertical-align: center;
+}
+
+div#card-viewer div#top-bar
+{
+	position: absolute;
+	width: 88%;
+	height: 7%;
+	left: 6%;
+	top: 2%;
+	overflow: hidden;
+}
+
+div#card-viewer div#top-bar h2
+{
+	vertical-align: middle;
+	text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+	color: #efefef;
+	padding: 0;
+	margin: 0;
 }
 
 .line{
@@ -374,6 +399,13 @@ div#card-viewer div#image-division-options
 .textbox {
 	height: 100px;
 	width: 300px;
+	overflow: auto;
+	resize: none;
+}
+
+.smallbox {
+	height: 50px;
+	width: 200px;
 	overflow: auto;
 	resize: none;
 }

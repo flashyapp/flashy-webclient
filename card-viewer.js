@@ -189,6 +189,9 @@ function display_current_deck() {
 	if (g_current_deck['cards'][index]['resources'] != null)
     {
 		hide_create_deck_from_list_form();
+		$("#divlines").empty(); 
+		hide_image_division_options();
+		$("#top-bar").html("<h2>" + g_current_deck.name + ": " + g_current_deck.description + "</h2>");
 		$("#card-content").html(g_current_deck['cards'][index]['side' + side]);
     }
     // for all the cards in the deck replace the flashyapp resource string
@@ -248,7 +251,7 @@ function prev_card() {
 
 //Delete the current deck permanently
 function delete_deck() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	if (g_current_deck == null) {
 		return;
@@ -284,7 +287,7 @@ function delete_deck() {
 
 //Modify the name and description of the current deck
 function modify_deck() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	if (g_current_deck == null) {
 		return;
@@ -322,7 +325,7 @@ function modify_deck() {
 
 //Delete the card at the current deck's current index
 function delete_card() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	if (g_current_deck == null) {
 		return;
@@ -361,7 +364,7 @@ function delete_card() {
 
 //Modify the card at the current deck's current index
 function modify_card() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	if (g_current_deck == null) {
 		return;
@@ -369,41 +372,112 @@ function modify_card() {
 	
 	index = g_current_deck['current_index'];
 	
+	//card html data
 	var request = {'username': $.cookie("username"), 'session_id': $.cookie("session_id")};
 	request.index = g_current_deck['cards'][index]['index'];
 	request.sideA = $("#modify-card-sidea").val();
 	request.sideB = $("#modify-card-sideb").val();
 	
-	var urltext = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify";
+	//Form data for resources
+	$("#modify-card-username").val($.cookie("username"));
+	$("#modify-card-session_id").val($.cookie("session_id"));
+	$("#modify-card-index").val(request.index);
+		
+	var sidechoice = $("input[type='radio']:checked").val();
 	
-	//AJAX - modify_card
-	$.ajax({
-		url: urltext,
-		data: JSON.stringify(request),
-		contentType: "application/json",
-		type: "POST",
-		dataType: "json",
-		success: function(json) { 
-			if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
-			else if (json.error == 400) alert("Error handling request.");
-			else if (json.error == 300) alert("Error: This deck no longer exists.");
-			if (json.error == 0){
-				alert("Card successfully modified.");
-			}
-			console.log(json);
-			location.reload();
-		},
-		error: function(xhr, status) { 
-			console.log(xhr);
-			alert( "Error handling request.");
-		},
-		complete: function(xhr, status) { ; }
-	});
+	var htmlurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify"; 
+	var resourceurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/add_resource";
+	
+	console.log($("#modify-card-file").val() != "");
+	
+	//Check if resource file upload
+	if ($("#modify-card-file").val() != "") {
+		
+		//AJAX - submit resource form
+		$("#modify-card-form").ajaxSubmit({
+			url: resourceurl,
+			contentType: "multipart/form-data",
+			type: "POST",
+			dataType: "json",
+			success: function(json) { 
+				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+				else if (json.error == 300) alert("Error: This deck no longer exists.");
+				else {
+					console.log(json);
+					console.log(sidechoice);
+					
+					//Add resource formatting to correct side, default to side A
+					if (sidechoice == "Side B") $("#modify-card-sideb").val( request.sideB + "<br> <img src='[FLASHYRESOURCE:" + json.resource_id + "]' />"); 
+					else $("#modify-card-sidea").val( request.sideA + "<br> <img src='[FLASHYRESOURCE:" + json.resource_id + "]' />");
+				
+					request.sideA = $("#modify-card-sidea").val();
+					request.sideB = $("#modify-card-sideb").val();
+					
+					console.log(request);
+					
+					//AJAX - modify card
+					$.ajax({
+						url: htmlurl,
+						data: JSON.stringify(request),
+						contentType: "application/json",
+						type: "POST",
+						dataType: "json",
+						success: function(json) { 
+							if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+							else if (json.error == 400) ;//alert("Error handling request.")
+							else if (json.error == 300) alert("Error: This deck no longer exists.");
+							if (json.error == 0){
+								alert("Card successfully modified.");
+							}
+							console.log(json);
+						},
+						error: function(xhr, status) { 
+							console.log(xhr);
+							//alert( "Error handling request.");
+						},
+						complete: function(xhr, status) { ; }
+						});
+					}
+					location.reload();
+				},
+			error: function(xhr, status) { 
+				console.log(xhr);
+				alert( "Error handling request.");
+			},
+			complete: function(xhr, status) { ; }
+		});
+	}		
+	else {
+		
+		//AJAX - only modify card
+		$.ajax({
+			url: htmlurl,
+			data: JSON.stringify(request),
+			contentType: "application/json",
+			type: "POST",
+			dataType: "json",
+			success: function(json) { 
+				if (json.error == 101) alert("Error: You don't have the permissions to access this feature. Please login or create a user account.");
+				else if (json.error == 400) ; //alert("Error handling request.");
+				else if (json.error == 300) alert("Error: This deck no longer exists.");
+				if (json.error == 0){
+					alert("Card successfully modified.");
+				}
+				console.log(json);
+				location.reload();
+			},
+			error: function(xhr, status) { 
+				console.log(xhr);
+				alert( "Error handling request.");
+			},
+			complete: function(xhr, status) { ; }
+		});
+	}
 }
 
 //Create a new card and append it to the end of the current deck
 function create_card() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	if (g_current_deck == null) {
 		return;
@@ -439,6 +513,13 @@ function create_card() {
 	});
 }
 
+function hook_modify_card_form() {
+    
+	$("#modify-card-form").submit(function(event) {
+		event.preventDefault();
+		modify_card();
+    });
+}
 
 $( document ).ready(function() {
     console.log("card-viewer hooks init...");
@@ -473,12 +554,15 @@ $( document ).ready(function() {
 	$("#delete-card-cancel").click( function() { hide_delete_card_dialog(); hide_overlay(); });
 	
 	$("#modify-card").click(show_modify_card_dialog);
-	$("#modify-card-confirm").click(modify_card);
+	hook_modify_card_form();
 	$("#modify-card-cancel").click( function() { hide_modify_card_dialog(); hide_overlay(); });
 	
 	$("#create-card").click(show_create_card_dialog);
 	$("#create-card-confirm").click(create_card);
 	$("#create-card-cancel").click( function() { hide_create_card_dialog(); hide_overlay(); });
+	
+	//Create NicEditors
+	//nicEditors.allTextAreas();
 	
     // if the user had a deck loaded before, load it again
     if ($.cookie("deck_id") != null)

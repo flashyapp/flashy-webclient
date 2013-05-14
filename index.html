@@ -3,12 +3,15 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="jquery.jscrollpane.css">
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <script src="jquery.js"> </script>
     <script src="jquery.cookie.js"> </script>
 	<script src="jquery.form.js"> </script>
-    <script src="jquery-ui.js"> </script>
-	
+	<script src="jquery.mousewheel.js"> </script>
+	<script src="jquery.jscrollpane.js"> </script>
+	<script src="jquery-ui.js"> </script>
+	<!--<script src="nicEdit.js"></script>-->
     <script src="user.js"> </script>
     <script src="card-viewer.js"> </script>
     <script src="deck.js"> </script>
@@ -18,7 +21,7 @@
   
   
     <div id="logo">
-      <img src="static/flashy_logo.png" />
+      <img src="static/flashy_logo.png" ></img>
     </div>
     <div id="header">
       <br />
@@ -59,13 +62,15 @@
 	</div>
 	
 	<div id="image-division-options">
-		<button id="add-horizontal" class="smallbutton">Add Horizontal</button>
+		<!--<button id="add-horizontal" class="smallbutton">Add Horizontal</button>
 		<button id="add-vertical" class="smallbutton">Add Vertical</button>
 		<button id="delete-horizontal" class="smallbutton">Delete Horizontal</button>
-		<button id="delete-vertical" class="smallbutton">Delete Vertical</button>
+		<button id="delete-vertical" class="smallbutton">Delete Vertical</button>-->
 		<button id="image-submit" class="smallbutton">Submit</button>
 		<button id="image-cancel" class="smallbutton">Cancel</button>
 	</div>
+	
+	<div id="top-bar"></div>
       
       <div class="nav" id="next">
 	<div class="vcenter">
@@ -78,7 +83,7 @@
     		
     <div id="deck-list">
       <div class="title"> Your Decks </div>
-      <ul id="deck-list-list">
+      <div class="scroll-pane"><ul id="deck-list-list">
 	<li> --- </li>
 	<li> --- </li>
 	<li> --- </li>
@@ -89,7 +94,7 @@
 	<li> --- </li>
 	<li> --- </li>
 	<li> --- </li>
-      </ul>
+      </ul></div>
 	  <div id="create-deck"> Create New Deck +</div>
     </div>
     <div id="overlay">
@@ -167,17 +172,25 @@
 	</div>
 	
 	<div id="dialog-modify-card" class="dialog">
-	<div class="message">Please enter new text for side A and side B.</div>
-	<p>Side A: <textarea id="modify-card-sidea" ></textarea></p>
-	<p>Side B: <textarea id="modify-card-sideb" ></textarea></p>
-	<button id="modify-card-confirm" class="smallbutton" >Modify</button>
+	<h2>Please enter new text for side A and side B.</h2>
+	<p>Side A: <textarea id="modify-card-sidea" class="smallbox" ></textarea>
+	Side B: <textarea id="modify-card-sideb" class="smallbox" ></textarea></p>
+	<p>To add an image, set the side to add it to and use the button: </p>
+	<input id='modify-card-side-choicea' type='radio' name='side' value='Side A'>Side A</input>
+	<input id='modify-card-side-choiceb' type='radio' name='side' value='Side B'>Side B</input>
+	<form id='modify-card-form' action='#' method='post'>
+	<input type='hidden' id='modify-card-session_id' name='session_id' />
+	<input type='hidden' id='modify-card-username' name='username' />
+	<input type='hidden' id='modify-card-index' name='index' />
+	<input type='file' id='modify-card-file' name='file' />
+	<input type="submit" id="modify-card-confirm" class="smallbutton" value="Modify" ></input></form>
 	<button id="modify-card-cancel" class="smallbutton" >Cancel</button>
 	</div>
 	
 	<div id="dialog-create-card" class="dialog">
 	<div class="message">Please enter text for side A and side B.</div>
-	<p>Side A: <textarea id="create-card-sidea" ></textarea></p>
-	<p>Side B: <textarea id="create-card-sideb" ></textarea></p>
+	<p>Side A: <textarea id="create-card-sidea" class="smallbox" ></textarea>
+	Side B: <textarea id="create-card-sideb" class="smallbox" ></textarea></p>
 	<button id="create-card-confirm" class="smallbutton" >Create</button>
 	<button id="create-card-cancel" class="smallbutton" >Cancel</button>
 	</div>
@@ -214,6 +227,13 @@
 	<button id="modify-user-confirm" class="smallbutton" >Change</button>
 	<button id="modify-user-cancel" class="smallbutton" >Cancel</button>
 	</div>
-  
+	
+	<div id="dialog-ie" class="dialog">
+	<div class="message">Internet Explorer's not Flashy</div>
+	<p>Our website is not supported by Internet explorer. It might work, but it certainly won't be as flashy.
+	For best results, try <a href="www.google.com/chrome/" >Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/" >Firefox.</a></p>
+	<button id="ie-continue" class="smallbutton" >Continue Anyway</button>
+	</div>
+	
   <body>
 </html>

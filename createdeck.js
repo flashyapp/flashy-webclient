@@ -20,8 +20,11 @@ function show_create_deck_from_list_form()
 	//move everything else out of the way
 	$("#card-content").empty();
 	g_current_deck = null;
+	$("#divlines").empty(); 
+	hide_image_division_options();
 	
 	//display form
+	$("#top-bar").html("<h2>Create Deck from List</h2>");
 	$("#create-deck-from-list-form").show();
 }
 
@@ -49,6 +52,7 @@ function show_image_division_options()
 
 function hide_image_division_options()
 {
+	$("#top-bar").html("");
 	$("#image-division-options").hide();
 	$("#option-list").show();
 }
@@ -80,7 +84,7 @@ function create_deck_from_image() {
 		newdivs[i][1][j] = image_width;
 	}
 	
-	console.log(newdivs);
+	//console.log(newdivs);
 	
 	request.divs = newdivs;
 	
@@ -115,7 +119,7 @@ function create_deck_from_image() {
 
 //create new deck from a list of terms
 function create_deck_from_list() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	var request = $("#from-list-form").serializeObject();
 	request.username = $.cookie("username");
@@ -156,7 +160,7 @@ function create_deck_from_list() {
 
 //uploads the image to be used for creating a deck from an image
 function upload_image() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	$("#from-image-form").append("<input type='hidden' id='username' name='username'></input> <input type='hidden' id='session_id' name='session_id'></input>");
 	
@@ -176,7 +180,7 @@ function upload_image() {
 				name = json.name;
 				display_image(json.divs, json.name);
 			}
-			console.log(json);
+			//console.log(json);
 		},
 		error: function(xhr, status) { 
 			console.log(xhr);
@@ -233,6 +237,7 @@ function display_image(divs, name) {
 		//draw image division lines
 		drawImageLines(divs);
 		
+		$("#top-bar").html("<h2>Fix Image Line Division</h2>");
 		show_image_division_options();		
 	}	
 	
@@ -349,6 +354,10 @@ function add_horizontal()
 	
 	for (i = 0; i < numCols[numRows] - 2; i++)
 	{
+		if (numRows - 2 < 0) var h = parseInt($("#row" + (numRows - 1)).css("height"));
+		else var h = parseInt($("#row" + (numRows - 1)).css("height")) - parseInt($("#row" + (numRows - 2)).css("height"));
+		$("#row" + (numRows - 1) + "col" + i).css("height", h);		
+		
 		var x = parseInt($("#row" + (numRows - 1) + "col" + i).css("left"));
 		//console.log(x);
 		var y1 = y;
@@ -377,6 +386,22 @@ function add_vertical()
 		y1 = y2;
 		numCols[i]++;
 	}
+}
+
+//removes the last horizontal line in divlines, along with all attached verticals
+function delete_horizontal()
+{
+	numRows--;
+	
+	$("#row" + (numRows - 1)).remove();
+	
+	for (i = 0; i < numCols[numRows] - 2; i++)
+	{
+		var h = parseInt($("#box").css("height")) - parseInt($("#row" + (numRows - 1)).css("height"));
+		console.log(h);
+		$("#row" + (numRows-1) + "col" + i).css("height", h)
+		$("#row" + numRows + "col" + i).remove(); 
+	}	
 }
 
 function drawImageBox(x1, y1, x2, y2, imageid) {
@@ -506,4 +531,5 @@ $( document ).ready(function() {
 	$("#image-cancel").click( function() { $("#divlines").empty(); hide_image_division_options(); });
 	$("#add-horizontal").click(add_horizontal);
 	$("#add-vertical").click(add_vertical);
+	$("#delete-horizontal").click(delete_horizontal);
 });

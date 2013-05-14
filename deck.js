@@ -42,6 +42,8 @@ function populate_deck_list(deck_list)
 	$("#" + deck.deck_id).click({deck_id: deck.deck_id}, load_deck);
     }
 	
+	var length = deck_list.length;
+	
 	//fill up to 10 slots (the max length before scroll)
 	if (deck_list.length < 10) {
 		for (i = 0; i < (10 - deck_list.length); i++)
@@ -49,7 +51,13 @@ function populate_deck_list(deck_list)
 			var str = "<li> --- </li>";
 			$("#deck-list-list").append(str);
 		}
+		length = 10;
 	}
+	
+	$("#deck-list-list").css("height", (length * 31));
+	
+	//activate jscrollpane
+	$(".scroll-pane").jScrollPane( {mouseWheelSpeed: 15});
 }
 
 $( document ).ready(function() {
@@ -59,6 +67,7 @@ $( document ).ready(function() {
 	console.log("user not logged in, doing nothing");
 	return;
     }
-    // user is logged in, populate the deck list
+	
+	// user is logged in, populate the deck list
     get_decks($.cookie("username"), $.cookie("session_id"));
 });

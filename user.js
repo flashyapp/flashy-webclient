@@ -34,6 +34,17 @@ function hide_modify_user_dialog()
 	$("#dialog-modify-user").hide();
 }
 
+function show_ie_dialog()
+{
+	$("#overlay").show();
+	$("#dialog-ie").show();
+}
+
+function hide_ie_dialog()
+{
+	$("#dialog-ie").hide();
+}
+
 function load_user_ui_elements()
 {
     // set the username
@@ -144,7 +155,7 @@ function signup_user() {
 }
 
 function reset_password() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	var request = new Object();
 	request.username = $("#reset-password-username").val();
@@ -173,7 +184,7 @@ function reset_password() {
 }
 
 function modify_user() {
-	event.preventDefault();
+	//event.preventDefault();
 	
 	var request = new Object();
 	request.old_password = $("#modify-user-old-password").val();
@@ -240,13 +251,31 @@ function hook_signup_form() {
     });
 }
 
+//adapted from http://stackoverflow.com/questions/4169160/javascript-ie-detection-why-not-use-simple-conditional-comments
+//determines if browser is Internet Explorer
+function ie() {
+
+    var undef,
+        v = 3,
+        div = document.createElement('div'),
+        all = div.getElementsByTagName('i');
+
+    while (
+        div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
+        all[0]
+    );
+
+    return v > 4 ? v : undef;
+
+}
 
 $( document ).ready( function() {
 	console.log("User function hooks loading...");
-
+	
 	//hide dialogs
 	hide_reset_password_dialog();
 	hide_modify_user_dialog();
+	hide_ie_dialog();
 	
 	// wrap the login form
 	hook_login_form();
@@ -263,6 +292,12 @@ $( document ).ready( function() {
 	$("#modify-user-confirm").click(modify_user);
 	$("#modify-user-cancel").click( function() { hide_modify_user_dialog(); hide_overlay(); });
 	
+	$("#ie-continue").click( function() { hide_ie_dialog();
+		if ($("#dialog-login").is(":hidden")) hide_overlay(); });	
+	
+	//Check if internet explorer -- not supported
+	if (ie()) show_ie_dialog();
+		
 	// if the user isn't logged in
 	if (($.cookie("username") == null) || ($.cookie("session_id") == null)) {
 	    console.log("User not logged in, showing login dialog")
