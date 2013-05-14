@@ -1,0 +1,239 @@
+<!doctype html>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+	<link rel="stylesheet" type="text/css" href="jquery.jscrollpane.css">
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <script src="jquery.js"> </script>
+    <script src="jquery.cookie.js"> </script>
+	<script src="jquery.form.js"> </script>
+	<script src="jquery.mousewheel.js"> </script>
+	<script src="jquery.jscrollpane.js"> </script>
+	<script src="jquery-ui.js"> </script>
+	<!--<script src="nicEdit.js"></script>-->
+    <script src="user.js"> </script>
+    <script src="card-viewer.js"> </script>
+    <script src="deck.js"> </script>
+	<script src="createdeck.js"> </script>
+  </head>
+  <body>
+  
+  
+    <div id="logo">
+      <img src="static/flashy_logo.png" ></img>
+    </div>
+    <div id="header">
+      <br />
+    </div>
+    <div id="user-info">
+	Logged in as: <span id="username-display">Username</span> <br />
+	<span id="modify-user"> User Settings </span> <br>
+	<span id="logout-button">Logout </span>	
+    </div>
+	<div id="wrapper">
+    <div id="card-viewer">
+      <div class="nav" id="prev">
+	<div class="vcenter">
+	  &lt;
+	</div>
+      </div>
+      <div id="card-content-outer">
+	<div id="card-content" class="vcenter">
+	  Please select a deck from the list on the left.
+	</div>
+	<div id="create-deck-from-list-form">
+	<form id="from-list-form" name="data" method="post" action="http://www.flashyapp.com/api/deck/new/from_lists">
+	<p>Deck Name: <input type="text" name="deck_name" /> </p>
+	<p>Description: <input type="text" name="description" /> </p>
+	<p>Optionally, create your cards automatically from a typed list of terms, separated by the "|" character: </p>
+	<p><textarea form="from-list-form" name="list" class="textbox">Example | Like this</textarea></p>
+	<p><input type="submit" class="smallbutton" value="Create Deck"/></p></form>
+	</div>
+	<div id="divlines"> </div>
+      </div>
+	  
+	<div id="option-list">
+		<button id="modify-deck" class="flashybutton">Modify Deck</button>
+		<button id="delete-deck" class="flashybutton">Delete Deck</button>
+		<button id="modify-card" class="flashybutton">Modify Card</button>
+		<button id="delete-card" class="flashybutton">Delete Card</button>
+		<button id="create-card" class="flashybutton">Add New Card</button>
+	</div>
+	
+	<div id="image-division-options">
+		<!--<button id="add-horizontal" class="smallbutton">Add Horizontal</button>
+		<button id="add-vertical" class="smallbutton">Add Vertical</button>
+		<button id="delete-horizontal" class="smallbutton">Delete Horizontal</button>
+		<button id="delete-vertical" class="smallbutton">Delete Vertical</button>-->
+		<button id="image-submit" class="smallbutton">Submit</button>
+		<button id="image-cancel" class="smallbutton">Cancel</button>
+	</div>
+	
+	<div id="top-bar"></div>
+      
+      <div class="nav" id="next">
+	<div class="vcenter">
+	  &gt;
+	</div>
+      </div>
+		
+    </div>
+	</div>
+    		
+    <div id="deck-list">
+      <div class="title"> Your Decks </div>
+      <div class="scroll-pane"><ul id="deck-list-list">
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+	<li> --- </li>
+      </ul></div>
+	  <div id="create-deck"> Create New Deck +</div>
+    </div>
+    <div id="overlay">
+      
+    </div>
+    <div id="dialog-login" class="dialog">
+      <div class="message"> You are currently not logged in to Flashy </div>
+      <div class="left-right-container">
+	<div class="left">
+	  <h2> Login </h2>
+	  <form id="login-form">
+	    <table>
+	      <tr>
+		<td>
+		  Username:
+		</td>
+		<td>
+		  <input type="text" name="username" /> <br />
+		</td>
+	      </tr>
+	      <tr>
+		<td>
+		  Password:
+		</td>
+		<td>
+		  <input type="password" name="password" /> <br />
+		</td>
+	      <tr>
+	    </table>
+	    <input type="submit" class="smallbutton" value="Login"/>
+	  </form>
+		<button id="reset-password" class="smallbutton">Forgot Password?</button>
+	</div>
+	<div class="right">
+	  <h2> Sign Up </h2>
+	  <form id="signup-form">
+	    <table>
+	    <tr>
+	      <td>Email:</td>
+	      <td><input type="text" name="email" /> <br /></td>
+	    </tr>
+	    <tr>
+	      <td>Username:</td>
+	      <td><input type="text" name="username" /> <br /></td>
+	    </tr>
+	    <tr>
+	      <td>Password:</td>
+	      <td><input type="password" name="password" /> <br /></td>
+	    </tr>
+	    </table>
+		<input type="submit" class="smallbutton" value="Sign Up!" />
+	  </form>	  
+	</div>
+      </div>
+    </div>
+	
+	<div id="dialog-delete-deck" class="dialog">
+	<div class="message">Are you sure you want to delete this deck?</div>
+	<button id="delete-deck-confirm" class="smallbutton" >Delete</button>
+	<button id="delete-deck-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-modify-deck" class="dialog">
+	<div class="message">Please enter a new name and description for your deck.</div>
+	<p>Deck Name: <input type="text" id="modify-deck-name" /></p>
+	<p>Description: <input type="text" id="modify-deck-desc" /></p>
+	<button id="modify-deck-confirm" class="smallbutton" >Modify</button>
+	<button id="modify-deck-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-delete-card" class="dialog">
+	<div class="message">Are you sure you want to delete this card?</div>
+	<button id="delete-card-confirm" class="smallbutton" >Delete</button>
+	<button id="delete-card-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-modify-card" class="dialog">
+	<h2>Please enter new text for side A and side B.</h2>
+	<p>Side A: <textarea id="modify-card-sidea" class="smallbox" ></textarea>
+	Side B: <textarea id="modify-card-sideb" class="smallbox" ></textarea></p>
+	<p>To add an image, set the side to add it to and use the button: </p>
+	<input id='modify-card-side-choicea' type='radio' name='side' value='Side A'>Side A</input>
+	<input id='modify-card-side-choiceb' type='radio' name='side' value='Side B'>Side B</input>
+	<form id='modify-card-form' action='#' method='post'>
+	<input type='hidden' id='modify-card-session_id' name='session_id' />
+	<input type='hidden' id='modify-card-username' name='username' />
+	<input type='hidden' id='modify-card-index' name='index' />
+	<input type='file' id='modify-card-file' name='file' />
+	<input type="submit" id="modify-card-confirm" class="smallbutton" value="Modify" ></input></form>
+	<button id="modify-card-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-create-card" class="dialog">
+	<div class="message">Please enter text for side A and side B.</div>
+	<p>Side A: <textarea id="create-card-sidea" class="smallbox" ></textarea>
+	Side B: <textarea id="create-card-sideb" class="smallbox" ></textarea></p>
+	<button id="create-card-confirm" class="smallbutton" >Create</button>
+	<button id="create-card-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-create-deck" class="dialog">
+	<h2>You can create a Flashy deck just by typing in a list of terms, or you can take a picture of your list and upload it. Which method would you like?</h2>
+	<button id="create-deck-from-image" class="smallbutton" >Create From Picture</button>
+	<button id="create-deck-from-list" class="smallbutton" >Create From List</button>
+	<button id="create-deck-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-upload-image" class="dialog">
+	<h2>Enter a title and description for your deck, then upload the image of your list of terms:</h2>
+	<form id="from-image-form" name="data" method="post" enctype="multipart/form-data" action="#" >
+	<p>Deck Name: <input type="text" name="deck_name" /> Description: <input type="text" name="description" /> </p>
+	<p><input type="file" id="file" name="file" /> </p>
+	<input type="submit" value="Upload" class="smallbutton" /></form> 
+	<button id="upload-image-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-reset-password" class="dialog">
+	<h2>Enter your username and email address and we'll reset your password. Your temporary password will be emailed to you shortly after.</h2>
+	<p>Username: <input type="text" id="reset-password-username" /></p>
+	<p>Email: <input type="text" id="reset-password-email" /></p>
+	<button id="reset-password-confirm" class="smallbutton" >Do it!</button>
+	<button id="reset-password-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-modify-user" class="dialog">
+	<div class="message">Change Password</div>
+	<p>Old Password: <input type="password" id="modify-user-old-password" /></p>
+	<p>New Password: <input type="password" id="modify-user-new-password" /></p>
+	<p>Confirm New Password: <input type="password" id="modify-user-cf-new-password" /></p>
+	<button id="modify-user-confirm" class="smallbutton" >Change</button>
+	<button id="modify-user-cancel" class="smallbutton" >Cancel</button>
+	</div>
+	
+	<div id="dialog-ie" class="dialog">
+	<div class="message">Internet Explorer's not Flashy</div>
+	<p>Our website is not supported by Internet explorer. It might work, but it certainly won't be as flashy.
+	For best results, try <a href="www.google.com/chrome/" >Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/" >Firefox.</a></p>
+	<button id="ie-continue" class="smallbutton" >Continue Anyway</button>
+	</div>
+	
+  <body>
+</html>

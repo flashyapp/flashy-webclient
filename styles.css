@@ -1,0 +1,475 @@
+html {
+    height:100%;
+}
+
+body {
+    height:100%;
+    margin:0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+	font-family: 'Droid Sans', sans-serif;
+    /* Thanks to colorzilla.com/gradient-editor */
+    background: #45484d;
+    background: -moz-linear-gradient(top, #45484d 0%, #000000 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000));
+    background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%);
+    background: -o-linear-gradient(top, #45484d 0%,#000000 100%);
+    background: -ms-linear-gradient(top, #45484d 0%,#000000 100%);
+    background: linear-gradient(to bottom, #45484d 0%,#000000 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 );
+}
+
+div.title {
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight:bold;
+    font-size:2em;
+    color:#e4e4e4;
+}
+
+div#overlay {
+    padding:0px;
+    margin:0px;
+    opacity:.9 ;
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:100%;
+    width:100%;
+    z-index: 2;
+    float:right;
+    background-color:#222222;
+}
+
+div#header {
+    background-color:#101010;
+    height:165px;
+    width:100%;
+    position:absolute;
+    top:0px;
+    opacity:0.3;
+}
+
+div#user-info {
+	z-index: 1;
+    opacity:1;
+    float:right;
+    position:absolute;
+    right:0px;
+    padding-right:40px;
+    background-color:#222222;
+    font-family: 'Droid Sans', sans-serif;
+    font-size:1em;
+    color:#6F6F6F;
+    height:60px;
+    width:300px;
+    padding-left:20px;
+    text-align:right;
+    border-bottom-left-radius:25px;
+}
+
+div#user-info span#username-display {
+	font-size:1.0em;
+    font-weight:bold;
+    color:#E4E4E4;
+}
+
+div#user-info span#logout-button {
+    font-size:1.0em;
+    font-weight:bold;
+	cursor: pointer;
+}
+
+div#user-info span#logout-button:hover {
+    font-size:1.0em;
+    font-weight:bold;
+    color:#e4e4e4;
+}
+
+div#user-info span#modify-user {
+    font-size:1.0em;
+    font-weight:bold;
+	cursor: pointer;
+}
+
+div#user-info span#modify-user:hover {
+    font-size:1.0em;
+    font-weight:bold;
+    color:#e4e4e4;
+}
+
+div#logo {
+    position:absolute;
+    top:0px;
+    z-index: 1;
+}
+
+div#logo img {
+    height:160px;
+}
+
+
+div.left-right-container {
+    clear:both;
+}
+
+
+div.dialog div.message {
+    width:100%;
+    text-align:center;
+    /* display:inline-block; */
+    margin-bottom:20px;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight:bold;
+    font-size:2em;
+}
+
+div.dialog h2 {
+    margin-top:0px;
+    margin-bottom:10px;
+    font-family: 'Droid Sans', sans-serif;
+    font-size:1.5em;
+}
+
+div.dialog
+{
+	z-index: 3;
+    width:700px;
+    height:210px;
+    position: fixed;
+    left:50%;
+    top:50%;
+    margin-left:-400px;
+    margin-top:-200px;
+    padding:20px;
+    padding-left:30px;
+    color:#c4c4c4;
+    background-color:#222222;
+    border-radius:25px;
+    border-color:#010101;
+    border-style:solid;
+}
+div.dialog td
+{
+    color:#c4c4c4;
+}
+div.left {
+    width:48%;
+    float: left;
+    border-right:solid;
+    padding:0px;
+    margin:0px;
+}
+div.right {
+    width:48%;
+    float:right;
+    padding:0px;
+    margin:0px;
+}
+
+div#deck-list {
+    width:300px;
+    border: solid #000000;
+    padding:0px;
+    background-color:#222222;
+
+    position:absolute;
+    top:220px;
+    left:-280px;
+
+    border-top-right-radius:25px;
+	border-bottom-right-radius: 25px;
+}
+
+div#deck-list:hover {
+    position:absolute;
+    left:0px;
+}
+
+div#deck-list div.title {
+    border-bottom: solid;
+}
+
+div#deck-list div.scroll-pane {
+	overflow: auto;
+	height: 310px;
+}
+
+div#deck-list ul {
+    padding:0px;
+    margin:0px;
+	/*height: 310px; /*310 for 10 items - each item 31px*/
+}
+
+div#deck-list ul li {
+    list-style-type:none;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight:bold;
+    font-size:1.5em;
+    color:#6f6f6f;
+    padding-bottom:0px;
+    text-align: center;
+    border-bottom:solid;
+	cursor: pointer;
+}
+
+div#deck-list ul li:hover {
+    color:#efefef;
+}
+
+div#deck-list div#create-deck {
+	font-family: 'Droid Sans', sans-serif;
+    font-weight:bold;
+    font-size:1.5em;
+    color: #efefef;
+	text-align: center;
+	border-top: solid;
+	padding-bottom: 2px;
+	cursor: pointer;
+}
+
+div#wrapper {
+	width: 960px;
+	height: 768px;
+	margin: 0 auto;
+	position: relative;
+}
+
+div#card-viewer {
+    height: 78%; /*600px / 768*/
+    width: 83%; /*800px / 960*/
+    clear: both;
+    background-color: #222222;
+    padding:0px;
+    position:absolute;
+    top: 16%; /*65px / 768*/
+    left: 8%;
+    /*margin-left: -400px;*/
+    border-radius:25px;
+}
+
+div#card-viewer div.nav {
+    color:#6f6f6f;
+    width: 5%;
+    padding:0px;
+    text-align: center;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight:bold;
+    font-size:2em;
+    display:table;
+    position:float;
+	cursor: pointer;
+}
+
+div#card-viewer div.nav:hover {
+    color:#efefef;
+    width: 5%;
+    text-align: center;
+}
+div#card-viewer div.vcenter {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+div#card-viewer div#create-deck-from-list-form{
+	text-align: center;
+	vertical-align:middle;
+	font-size: .8em;	
+}
+
+div#divlines {
+	position: absolute;
+}
+
+div#card-viewer div#prev
+{
+    float:left;
+    height: 100%;
+    position:absolute;
+    left: 0%;
+    top: 0%;
+    background: -moz-linear-gradient(left,  rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.75) 19%, rgba(69,72,77,0.75) 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.75)), color-stop(19%,rgba(0,0,0,0.75)), color-stop(100%,rgba(69,72,77,0.75)));
+    background: 3-webkit-linear-gradient(left,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.75) 19%,rgba(69,72,77,0.75) 100%);
+    background: -o-linear-gradient(left,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.75) 19%,rgba(69,72,77,0.75) 100%);
+    background: -ms-linear-gradient(left,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.75) 19%,rgba(69,72,77,0.75) 100%);
+    background: linear-gradient(to right,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.75) 19%,rgba(69,72,77,0.75) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', endColorstr='#bf45484d',GradientType=1 );
+
+    border-top-left-radius:25px;
+    border-bottom-left-radius:25px;
+}
+
+div#card-viewer div#next
+{
+    float:right;
+    height: 100%;
+    position:absolute;
+    left: 95%;
+    top: 0%;
+    /* padding-top:50%; */
+    background: -moz-linear-gradient(left,  rgba(69,72,77,0.75) 0%, rgba(0,0,0,0.75) 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(69,72,77,0.75)), color-stop(100%,rgba(0,0,0,0.75)));
+    background: -webkit-linear-gradient(left,  rgba(69,72,77,0.75) 0%,rgba(0,0,0,0.75) 100%);
+    background: -o-linear-gradient(left,  rgba(69,72,77,0.75) 0%,rgba(0,0,0,0.75) 100%);
+    background: -ms-linear-gradient(left,  rgba(69,72,77,0.75) 0%,rgba(0,0,0,0.75) 100%);
+    background: linear-gradient(to right,  rgba(69,72,77,0.75) 0%,rgba(0,0,0,0.75) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf45484d', endColorstr='#bf000000',GradientType=1 );
+
+    border-top-right-radius:25px;
+    border-bottom-right-radius:25px;
+}
+
+div#card-viewer div#card-content-outer
+{
+    width: 87%;
+    height: 83%;
+    margin-left: 6%;
+    position:relative;
+    background-color:#ffffda;
+    top: 9%;
+    z-index:0;
+    display:table;
+    text-align:center;
+    font-family: 'Droid Sans', sans-serif;
+    font-size:2em;
+    border-style:inset;
+}
+
+div#card-viewer div#option-list
+{
+	z-index: 0;
+	position: absolute;
+	width: 87%;
+	height: 6%;
+	left: 6%;
+	top: 93%;
+	vertical-align: center;
+}
+
+div#card-viewer div#image-division-options
+{
+	z-index: 0;
+	position: absolute;
+	width: 88%;
+	height: 6%;
+	left: 6%;
+	top: 93%;
+	vertical-align: center;
+}
+
+div#card-viewer div#top-bar
+{
+	position: absolute;
+	width: 88%;
+	height: 7%;
+	left: 6%;
+	top: 2%;
+	overflow: hidden;
+}
+
+div#card-viewer div#top-bar h2
+{
+	vertical-align: middle;
+	text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+	color: #efefef;
+	padding: 0;
+	margin: 0;
+}
+
+.line{
+	padding: 1px;
+}
+
+.box{
+	border-style: solid;
+	border-color: #000;
+}
+
+.image{
+	top: 0;
+	left: 0;
+	position: absolute;
+}
+
+.textbox {
+	height: 100px;
+	width: 300px;
+	overflow: auto;
+	resize: none;
+}
+
+.smallbox {
+	height: 50px;
+	width: 200px;
+	overflow: auto;
+	resize: none;
+}
+
+.flashybutton {
+	cursor: pointer;
+	-moz-box-shadow:inset 0px 1px 0px 0px #636363;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #636363;
+	box-shadow:inset 0px 1px 0px 0px #636363;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #616161), color-stop(1, #000000) );
+	background:-moz-linear-gradient( center top, #616161 5%, #000000 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#616161', endColorstr='#000000');
+	background-color:#616161;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #3d3d3d;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:4px 18px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #000000;
+}.flashybutton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #000000), color-stop(1, #616161) );
+	background:-moz-linear-gradient( center top, #000000 5%, #616161 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#616161');
+	background-color:#000000;
+}.flashybutton:active {
+	position:relative;
+	top:1px;
+}
+/* This imageless css button was generated by CSSButtonGenerator.com */
+
+.smallbutton {
+	cursor: pointer;
+	-moz-box-shadow:inset 0px 1px 0px 0px #636363;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #636363;
+	box-shadow:inset 0px 1px 0px 0px #636363;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #616161), color-stop(1, #000000) );
+	background:-moz-linear-gradient( center top, #616161 5%, #000000 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#616161', endColorstr='#000000');
+	background-color:#616161;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #3d3d3d;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:2px 10px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #000000;
+}.smallbutton:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #000000), color-stop(1, #616161) );
+	background:-moz-linear-gradient( center top, #000000 5%, #616161 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#616161');
+	background-color:#000000;
+}.smallbutton:active {
+	position:relative;
+	top:1px;
+}
+/* This imageless css button was generated by CSSButtonGenerator.com */

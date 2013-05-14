@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <script src="jquery.js"> </script>
+    <script src="jquery.cookie.js"> </script>
+    <script src="jquery-ui.js"> </script>
+    <script src="user.js"> </script>
+    <script src="deck.js"> </script>
+  </head>
+  <body>
+    <div id="logo">
+      <img src="static/flashy_logo.png" />
+    </div>
+    <div id="header">
+      <br />
+    </div>
+    <div id="user-info">
+	Logged in as: <span id="username-display">Username</span> <br />
+	<span id="logout-button"> Logout </span>	
+    </div>
+    <div id="card-viewer">
+      <div class="nav" id="prev">
+	<div class="vcenter">
+	  &lt;
+	</div>
+      </div>
+      <div id="card-content-outer">
+	<div id="card-content" class="vcenter">
+	  This is some sample card content
+	</div>
+      </div>
+      
+      <div class="nav" id="next">
+	<div class="vcenter">
+	  &gt;
+	</div>
+      </div>
+      
+    </div>
+    
+    <div id="deck-list">
+      <div class="title"> Your Decks </div>
+      <ul id="deck-list-list">
+	<li> This is Deck #1 </li>
+	<li> This is Deck #2 </li>
+	<li> This is Deck #1 </li>
+	<li> This is Deck #2 </li>
+      </ul>
+    </div>
+    <div id="overlay">
+      
+    </div>
+    <div id="dialog-login">
+      <div class="message"> You are currently not logged in to Flashy </div>
+      <div class="left-right-container">
+	<div class="left">
+	  <h2> Login </h2>
+	  <form id="login-form">
+	    <table>
+	      <tr>
+		<td>
+		  Username:
+		</td>
+		<td>
+		  <input type="text" name="username" /> <br />
+		</td>
+	      </tr>
+	      <tr>
+		<td>
+		  Password:
+		</td>
+		<td>
+		  <input type="password" name="password" /> <br />
+		</td>
+	      <tr>
+	    </table>
+	    <input type="submit" value="Login"/>
+	  </form>
+	</div>
+	<div class="right">
+	  <h2> Sign Up </h2>
+	  <form>
+	    <table>
+	    <tr>
+	      <td>Email:</td>
+	      <td><input type="text" name="email" /> <br /></td>
+	    </tr>
+	    <tr>
+	      <td>Username:</td>
+	      <td><input type="text" name="username" /> <br /></td>
+	    </tr>
+	    <tr>
+	      <td>Password:</td>
+	      <td><input type="password" name="password" /> <br /></td>
+	    </tr>
+	    </table>
+	  </form>	  
+	</div>
+      </div>
+    </div>
+
+  <body>
+</html>
