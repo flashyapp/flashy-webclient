@@ -1,12 +1,14 @@
 var g_deck_list = {};
 
-
+//get list of decks
 function get_decks(username, session_id)
 {
     var request = {
 	username: username,
 	session_id: session_id
     };
+	
+	//AJAX - get deck list
     $.ajax({
 	url: "http://www.flashyapp.com/api/deck/get_decks",
 	data: JSON.stringify(request),
@@ -28,6 +30,7 @@ function get_decks(username, session_id)
     });		
 }
 
+//load deck list into sidebar
 function populate_deck_list(deck_list)
 {
     console.log("populating the deck list");
@@ -60,6 +63,7 @@ function populate_deck_list(deck_list)
 	$(".scroll-pane").jScrollPane( {mouseWheelSpeed: 15});
 }
 
+//execute on load
 $( document ).ready(function() {
     console.log("deck hooks starting...");
 

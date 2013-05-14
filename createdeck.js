@@ -3,6 +3,7 @@ var image_width;
 var image_height;
 var name;
 
+//show and hide dialogs
 function show_create_deck_dialog()
 {	
 	
@@ -57,6 +58,7 @@ function hide_image_division_options()
 	$("#option-list").show();
 }
 
+//create deck using division lines on an image
 function create_deck_from_image() {
 	
 	var request = $("#from-image-form").serializeObject();
@@ -66,6 +68,7 @@ function create_deck_from_image() {
 	
 	var newdivs = new Array(numRows);
 	
+	//format divisions
 	for (i = 0; i < numRows; i++)
 	{
 		newdivs[i] = new Array(2);
@@ -90,6 +93,7 @@ function create_deck_from_image() {
 	
 	var urltext = "http://www.flashyapp.com/api/deck/new/from_image";
 	
+	//AJAX - create deck from image
 	$.ajax({
 		url: urltext,
 		data: JSON.stringify(request),
@@ -286,6 +290,7 @@ function hook_upload_image() {
 	});
 }
 
+//draw division lines on image
 function drawImageLines(divs) {
 
 	var rowIndex = 0;
@@ -507,6 +512,7 @@ function getVertical(index, jindex)
 	return parseInt($("#row" + index + "col" + jindex).css("left")) - parseInt($("#box").css("left"));
 }
 
+//execute on load
 $( document ).ready(function() {
 	
 	//hide dialogs

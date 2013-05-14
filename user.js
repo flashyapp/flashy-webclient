@@ -1,5 +1,6 @@
 var LOGIN_FORM = "#login-form";
 
+//show and hide dialogs
 function show_login_dialog()
 {
     $("#overlay").show();
@@ -161,6 +162,7 @@ function reset_password() {
 	request.username = $("#reset-password-username").val();
 	request.email = $("#reset-password-email").val();
 	
+	//AJAX - reset password
 	$.ajax({
 		url: "http://www.flashyapp.com/api/user/reset_password",
 		data: JSON.stringify(request),
@@ -183,6 +185,7 @@ function reset_password() {
 	});
 }
 
+//Change the user's password
 function modify_user() {
 	//event.preventDefault();
 	
@@ -194,7 +197,8 @@ function modify_user() {
 			
 	var password_valid = ((request.new_password != "") && (request.new_password === request.cf_new_password)); 
 	if (!password_valid) alert("Please make sure you have entered your new password correctly.");
-			
+	
+	//AJAX - modify user
 	if (password_valid) {
 		$.ajax({
 			url: "http://www.flashyapp.com/api/user/modify",
@@ -232,7 +236,7 @@ function validate_email(email) {
 	return (email != "");
 }
 
-
+//click handler for login form
 function hook_login_form() {
     console.log("hooking the login form")
     
@@ -242,6 +246,7 @@ function hook_login_form() {
     });
 }
 
+//click handler for signup form
 function hook_signup_form() {
     console.log("hooking the signup form")
     
@@ -269,6 +274,7 @@ function ie() {
 
 }
 
+//execute on load
 $( document ).ready( function() {
 	console.log("User function hooks loading...");
 	

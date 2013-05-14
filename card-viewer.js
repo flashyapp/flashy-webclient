@@ -1,3 +1,7 @@
+//card-viewer.js
+//contains functions relating to the display and modification of decks and cards
+//Joe Turchiano and Nick Beaulieu
+
 var g_current_deck;
 
 function show_delete_deck_dialog()
@@ -22,6 +26,7 @@ function show_modify_deck_dialog()
 	}
 	
     $("#overlay").show();
+	//show current values
 	$("#modify-deck-name").val(g_current_deck.name);
 	$("#modify-deck-desc").val(g_current_deck.description);
     $("#dialog-modify-deck").show();
@@ -58,6 +63,8 @@ function show_modify_card_dialog()
     $("#overlay").show();
 	
 	index = g_current_deck['current_index'];
+	
+	//show current values
 	$("#modify-card-sidea").val(g_current_deck['cards'][index]['sideA']);
 	$("#modify-card-sideb").val(g_current_deck['cards'][index]['sideB']);
 	
@@ -117,8 +124,12 @@ function getCardResource() {
 			$.cookie("deck_id", null, {domain: "www.flashyapp.com", path: "/"});
 		}
 	    if (json.error == 0){
+		
 		g_current_deck['cards'][index]['resources'] = json.resources;
-		console.log(json.resources);
+		
+		//console.log(json.resources);
+		
+		//replace each FLASHYRESOURCE tag with the website image url
 		for (i = 0; i < json.resources.length; i++)
 		{
 		    g_current_deck['cards'][index]['sideA'] = g_current_deck['cards'][index]['sideA'].replace("[FLASHYRESOURCE:" + json.resources[i].resource_id + "]", 
@@ -186,15 +197,19 @@ function display_current_deck() {
 	var index = g_current_deck['current_index'];
     var side = g_current_deck['side'];
 	
+	//if the deck has been loaded
 	if (g_current_deck['cards'][index]['resources'] != null)
     {
+		//move everything out of the way
 		hide_create_deck_from_list_form();
 		$("#divlines").empty(); 
 		hide_image_division_options();
+		
+		//display the deck
 		$("#top-bar").html("<h2>" + g_current_deck.name + ": " + g_current_deck.description + "</h2>");
 		$("#card-content").html(g_current_deck['cards'][index]['side' + side]);
     }
-    // for all the cards in the deck replace the flashyapp resource string
+    // otherwise load the deck
     else {
 		getCardResource();
 	}
@@ -379,19 +394,20 @@ function modify_card() {
 	request.sideB = $("#modify-card-sideb").val();
 	
 	//Form data for resources
+	/*
 	$("#modify-card-username").val($.cookie("username"));
 	$("#modify-card-session_id").val($.cookie("session_id"));
 	$("#modify-card-index").val(request.index);
 		
 	var sidechoice = $("input[type='radio']:checked").val();
-	
+	*/
 	var htmlurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/modify"; 
-	var resourceurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/add_resource";
+	//var resourceurl = "http://www.flashyapp.com/api/deck/" + $.cookie("deck_id") + "/card/add_resource";
 	
-	console.log($("#modify-card-file").val() != "");
+	//console.log($("#modify-card-file").val() != "");
 	
 	//Check if resource file upload
-	if ($("#modify-card-file").val() != "") {
+	/*if ($("#modify-card-file").val() != "") {
 		
 		//AJAX - submit resource form
 		$("#modify-card-form").ajaxSubmit({
@@ -448,7 +464,7 @@ function modify_card() {
 		});
 	}		
 	else {
-		
+	*/	
 		//AJAX - only modify card
 		$.ajax({
 			url: htmlurl,
@@ -472,7 +488,7 @@ function modify_card() {
 			},
 			complete: function(xhr, status) { ; }
 		});
-	}
+	//}
 }
 
 //Create a new card and append it to the end of the current deck
@@ -513,14 +529,16 @@ function create_card() {
 	});
 }
 
+//click handler for modify-card
 function hook_modify_card_form() {
     
-	$("#modify-card-form").submit(function(event) {
+	$("#modify-card-confirm").click(function(event) {
 		event.preventDefault();
 		modify_card();
     });
 }
 
+//execute on load
 $( document ).ready(function() {
     console.log("card-viewer hooks init...");
 	
@@ -531,8 +549,9 @@ $( document ).ready(function() {
 	hide_modify_card_dialog();
 	hide_create_card_dialog();
 	
+	//do nothing unless logged in
     if (($.cookie("username") == null) || ($.cookie("session_id") == null)) {
-	console.log("user not logged in, doing nothing");
+	//console.log("user not logged in, doing nothing");
 	return;
     }
 		
